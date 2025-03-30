@@ -1,0 +1,6 @@
+# ORS cache
+mosquitto-docker/data/*
+ors-docker/elevation_cache/*
+ors-docker/graphs/*
+ors-docker/files/*
+.vs/*
