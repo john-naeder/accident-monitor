@@ -1,4 +1,5 @@
-﻿using AccidentMonitoring.Application.ORService.Queries.GetDirections;
+﻿using AccidentMonitoring.Application.DTOs;
+using AccidentMonitoring.Application.ORService.Queries.GetDirections;
 using AccidentMonitoring.Application.ORService.Queries.GetStatus;
 using AccidentMonitoring.Application.ORService.Queries.HealthCheck;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -31,7 +32,7 @@ public class RoutingDirection : EndpointGroupBase
         return TypedResults.Ok(result);
     }
 
-    public async Task<Ok<GetDirectionDefaultResponseDto>> GetDirection(
+    public async Task<Ok<DirectionDefaultCutResponseDto>> GetDirection(
         ISender sender, [FromRoute] string profile, 
         [FromQuery] string start, [FromQuery] string end)
     {

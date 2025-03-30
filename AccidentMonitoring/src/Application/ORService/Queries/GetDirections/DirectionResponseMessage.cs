@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using AccidentMonitoring.Application.ORService.Queries.GetDirections;
+﻿using AccidentMonitoring.Application.ORService.Queries.GetDirections;
 
 namespace AccidentMonitoring.Application.DTOs
 {
-    public class MqttDirectionDefaultResponseDto
+    public class DirectionDefaultCutResponseDto
     {
         public List<double> Bbox { get; set; } = [];
         public List<SegmentDto> Segments { get; set; } = [];
@@ -28,12 +24,12 @@ namespace AccidentMonitoring.Application.DTOs
 
     public static class DirectionMapper
     {
-        public static MqttDirectionDefaultResponseDto Map(GetDirectionDefaultResponseDto source)
+        public static DirectionDefaultCutResponseDto Map(GetDirectionDefaultResponseDto source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            var response = new MqttDirectionDefaultResponseDto();
+            var response = new DirectionDefaultCutResponseDto();
 
             response.Bbox = source.Bbox.Select(x => Convert.ToDouble(x)).ToList();
 

@@ -1,26 +1,24 @@
 ﻿using AccidentMonitoring.Infrastructure;
 using AccidentMonitoring.Infrastructure.Data;
 using AccidentMonitoring.Infrastructure.MQTT;
+using AccidentMonitoring.Web;
 
 public class Program
 {
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
+        builder.Configuration.AddEnvironmentVariables();
         builder.AddServiceDefaults();
         builder.AddKeyVaultIfConfigured();
         builder.AddApplicationServices();
         builder.AddInfrastructureServices();
         builder.AddWebServices();
-        builder.Services.Configure<MqttConnectionConfiguration>(
-            builder.Configuration.GetSection("MqttConnectionConfig"));
+
         var app = builder.Build();
 
         await app.InitializeMqttAsync();
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Error");
@@ -28,11 +26,10 @@ public class Program
         }
         else
         {
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseSwaggerUi(settings =>

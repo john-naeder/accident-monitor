@@ -47,7 +47,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetDirectionDefaultResponseDto"
+                  "$ref": "#/components/schemas/DirectionDefaultCutResponseDto"
                 }
               }
             }
@@ -521,38 +521,10 @@
   },
   "components": {
     "schemas": {
-      "GetDirectionDefaultResponseDto": {
+      "DirectionDefaultCutResponseDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "type": {
-            "type": "string"
-          },
-          "bbox": {
-            "type": "array",
-            "items": {
-              "type": "number",
-              "format": "float"
-            }
-          },
-          "features": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Feature"
-            }
-          },
-          "metadata": {
-            "$ref": "#/components/schemas/Metadata"
-          }
-        }
-      },
-      "Feature": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "type": {
-            "type": "string"
-          },
           "bbox": {
             "type": "array",
             "items": {
@@ -560,37 +532,15 @@
               "format": "double"
             }
           },
-          "properties": {
-            "$ref": "#/components/schemas/Properties"
-          },
-          "geometry": {
-            "$ref": "#/components/schemas/Geometry"
-          }
-        }
-      },
-      "Properties": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
           "segments": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Segment"
+              "$ref": "#/components/schemas/SegmentDto"
             }
-          },
-          "way_points": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "summary": {
-            "$ref": "#/components/schemas/Summary"
           }
         }
       },
-      "Segment": {
+      "SegmentDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -605,12 +555,12 @@
           "steps": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Step"
+              "$ref": "#/components/schemas/StepDto"
             }
           }
         }
       },
-      "Step": {
+      "StepDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -621,117 +571,8 @@
           "duration": {
             "type": "number",
             "format": "double"
-          },
-          "type": {
-            "type": "integer",
-            "format": "int32"
           },
           "instruction": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "way_points": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        }
-      },
-      "Summary": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "distance": {
-            "type": "number",
-            "format": "double"
-          },
-          "duration": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "Geometry": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "type": {
-            "type": "string"
-          },
-          "coordinates": {
-            "type": "array",
-            "items": {
-              "type": "array",
-              "items": {
-                "type": "number",
-                "format": "double"
-              }
-            }
-          }
-        }
-      },
-      "Metadata": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "attribution": {
-            "type": "string"
-          },
-          "service": {
-            "type": "string"
-          },
-          "timestamp": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "query": {
-            "$ref": "#/components/schemas/Query"
-          },
-          "engine": {
-            "$ref": "#/components/schemas/EngineInfoDto"
-          }
-        }
-      },
-      "Query": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "coordinates": {
-            "type": "array",
-            "items": {
-              "type": "array",
-              "items": {
-                "type": "number",
-                "format": "double"
-              }
-            }
-          },
-          "profile": {
-            "type": "string"
-          },
-          "profileName": {
-            "type": "string"
-          },
-          "format": {
-            "type": "string"
-          }
-        }
-      },
-      "EngineInfoDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "build_date": {
-            "type": "string"
-          },
-          "graph_version": {
-            "type": "string"
-          },
-          "version": {
             "type": "string"
           }
         }

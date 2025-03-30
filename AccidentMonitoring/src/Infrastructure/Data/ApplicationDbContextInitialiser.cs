@@ -16,11 +16,11 @@ public static class InitializerExtensions
     {
         using var scope = app.Services.CreateScope();
 
-        var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
+        var initializer = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
 
-        await initialiser.InitializeAsync();
+        await initializer.InitializeAsync();
 
-        await initialiser.SeedAsync();
+        await initializer.SeedAsync();
     }
 }
 

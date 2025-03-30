@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace AccidentMonitoring.Web;
 public static class DependencyInjection
 {
     public static void AddWebServices(this IHostApplicationBuilder builder)

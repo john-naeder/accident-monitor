@@ -1,13 +1,12 @@
 services:
   # -------------------------- Accident monitor ------------------------ #
   accident-monitor:
-    container_name: accident_monitoring_release
-    image: accidentmonitoring:release
+    container_name: accident-monitor
     build:
-      context: ./AccidentMonitoring
-      dockerfile: Dockerfile
       args:
-        BUILD_CONFIGURATION: Release
+        BUILD_CONFIGURATION: Debug
+      context: ./AccidentMonitoring/
+      dockerfile: Dockerfile
     ports:
       - "5000:80"
       - "5001:443"
@@ -19,21 +18,20 @@ services:
       mosquitto:
         condition: service_healthy
         restart: true
+    volumes:
+      - ./src:/accident-monitor-app
+    environment:
+      ASPIRE_ALLOW_UNSECURED_TRANSPORT: true,
+      ConnectionStrings__AccidentMonitorDB: "Server=accident-monitor-db,1433;Database=AccidentMonitorDB;User Id=sa;Password=#password123sdJwnwlk;TrustServerCertificate=True;"
+      MqttConnectionConfig__Broker: "mosquitto"
+      ASPNETCORE_HTTP_PORTS: 80
+      # ASPNETCORE_HTTPS_PORTS: 443
     networks:
       - net_sim
     restart: unless-stopped
-    environment:
-      ASPNETCORE_ENVIRONMENT: Production
-      ASPIRE_ALLOW_UNSECURED_TRANSPORT: false
-      ConnectionStrings__AccidentMonitorDB: "Server=accident-monitor-db,1433;Database=AccidentMonitorDB;User Id=sa;Password=#password123sdJwnwlk;TrustServerCertificate=True;"
-      MqttConnectionConfig__Broker: "mosquitto"
-      # ASPNETCORE_HTTP_PORTS: 80
-      ASPNETCORE_HTTPS_PORTS: 443
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8081/health || exit 1"]
       interval: 30s
       retries: 5
       start_period: 20s
       timeout: 10s
-    volumes:
-      - ./src/Web:/app

@@ -35,10 +35,9 @@ public class MqttClientContextInitializer
         try
         {
             await _mqttServices.StartAsync();
-            await _mqttServices.PublishAsync("rsu/Request/Directions", new GetDirectionDefaultRequestDto
+            await _mqttServices.PublishAsync("server/HealthCheck", new
             {
-                StartingCoordinate = "10.233",
-                DestinationCoordinate = "100.32"
+                Status = "Ok"
             });
             //await _mqttServices.ConnectAsync();
             _logger.LogInformation("Broker connection initialized.");

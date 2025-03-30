@@ -1,6 +1,8 @@
 ﻿# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /accident-monitor-app
+EXPOSE 80
+EXPOSE 443
 
 COPY ["./*.props", "./"]
 COPY ["./*.sln", "./"]
@@ -24,12 +26,8 @@ WORKDIR "/accident-monitor-app/src/Web"
 RUN dotnet publish "Web.csproj" -c Release -o /accident-monitor-app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
-EXPOSE 5001
 
 COPY --from=build /accident-monitor-app/publish .
-
-ENV ASPNETCORE_ENVIRONMENT=Production
-ENV DOTNET_ENVIRONMENT=Production
 
 # Set entry point
 ENTRYPOINT ["dotnet", "AccidentMonitoring.Web.dll"]

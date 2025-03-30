@@ -73,11 +73,8 @@ namespace AccidentMonitoring.Infrastructure.MQTT
         {
             var uri = $"tcp://{_config.Broker}:{_config.Port}/{_config.Protocol}";
             var builder = new MqttClientOptionsBuilder()
-                //.WithCleanSession()
                 .WithClientId(_config.ClientID)
                 .WithTcpServer(_config.Broker, _config.Port)
-                //.WithWebSocketServer(
-                //    o => o.WithUri(uri))
                 .WithProtocolVersion((MqttProtocolVersion)_config.ProtocolVersion)
                 .WithTimeout(TimeSpan.FromSeconds(5))
                 .WithKeepAlivePeriod(TimeSpan.FromSeconds(60))
@@ -120,7 +117,7 @@ namespace AccidentMonitoring.Infrastructure.MQTT
                 {
                     _logger.LogInformation("Attempting to connect to MQTT broker at {Server}:{Port}",
                         _config.Broker, _config.Port);
-                     await _mqttClient.ConnectAsync(clientOptions, _cancellationTokenSource.Token);
+                      await _mqttClient.ConnectAsync(clientOptions, _cancellationTokenSource.Token);
                     _logger.LogInformation("Connected to MQTT broker successfully");
                 }
             }
@@ -154,7 +151,6 @@ namespace AccidentMonitoring.Infrastructure.MQTT
             if (_isDisposed) return;
 
             _logger.LogWarning("Disconnected from MQTT broker: {Reason}", args.Reason);
-            Console.WriteLine("Disconnected from MQTT broker: {Reason}", args.Reason);
             while (!_mqttClient.IsConnected && !_isDisposed)
             {
                 try
@@ -183,10 +179,7 @@ namespace AccidentMonitoring.Infrastructure.MQTT
         public async Task<ServiceResult> SubscribeAsync()
         {
             var subscribeOptions = _mqttClientFactory.CreateSubscribeOptionsBuilder();
-            //.WithTopicFilter("test");
-            //.WithTopicFilter("rsu/accident/AccidentAlert/")
-            //.WithTopicFilter("rsu/routing/RequestDirection/")
-            //.WithTopicFilter("rsu/HealthCheck/");
+
             foreach (var topic in _config.SubTopics)
             {
                 subscribeOptions = subscribeOptions.WithTopicFilter(topic, MqttQualityOfServiceLevel.AtLeastOnce);
@@ -237,14 +230,14 @@ namespace AccidentMonitoring.Infrastructure.MQTT
 
                 switch (topic)
                 {
-                    case var t when t.StartsWith("rsu/Requests/Directions"):
-                        await HandleDirectionRequestAsync(payload);
-                        break;
-                    case var t when t.StartsWith("rsu/AccidentAlert/"):
+                    case var t when t.StartsWith(_config.SubTopics[0]):
                         //HandleHumidity(payload);
                         break;
-                    case "devices/status":
+                    case var t when t.StartsWith(_config.SubTopics[1]):
                         //HandleDeviceStatus(payload);
+                        break;
+                    case var t when t.StartsWith(_config.SubTopics[2]):
+                        await HandleDirectionRequestAsync(payload);
                         break;
                     default:
                         _logger.LogWarning("Unhandled topic: {Topic}", topic);

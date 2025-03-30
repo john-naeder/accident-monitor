@@ -5,7 +5,7 @@ using AccidentMonitoring.Application.Common.Interfaces;
 using AccidentMonitoring.Application.ORService.Queries.GetDirections;
 
 namespace AccidentMonitoring.Infrastructure.ORS;
-public class ORService(ApiConfiguration options) : IORService
+public class ORService(ORSConfiguration options) : IORService
 {
     private readonly HttpClient _httpClient = new();
 

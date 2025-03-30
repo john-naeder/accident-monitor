@@ -1,21 +1,21 @@
 services:
   # ----------------- event-driven applications ------------------- #
-  node-red:
-    image: nodered/node-red:latest
-    container_name: node-red
-    ports:
-      - "1881:1880"
-    volumes:
-      - ./rednode-docker/data:/data
-    restart: unless-stopped
-    # deploy:
-    #   restart_policy:
-    #     condition: on-failure
-    #     delay: 5s
-    #     max_attempts: 5
-    #     window: 120s
-    networks:
-      - net_sim
+  # node-red:
+  #   image: nodered/node-red:latest
+  #   container_name: node-red
+  #   ports:
+  #     - "1881:1880"
+  #   volumes:
+  #     - ./rednode-docker/data:/data
+  #   restart: unless-stopped
+  #   # deploy:
+  #   #   restart_policy:
+  #   #     condition: on-failure
+  #   #     delay: 5s
+  #   #     max_attempts: 5
+  #   #     window: 120s
+  #   networks:
+  #     - net_sim
   # -------------------------- MQTT broker ------------------------ #
   mosquitto:
     image: eclipse-mosquitto:latest
@@ -69,11 +69,11 @@ services:
       - net_sim
     healthcheck:
      test: wget --no-verbose --tries=1 --spider http://localhost:8080/ors/v2/health || exit 1
-     start_period: 1m
+     start_period: 10m
      interval: 30s
      timeout: 2s
      retries: 3
-     disable: false
+     disable: true
     # deploy:
     #   restart_policy:
     #     condition: on-failure
@@ -82,6 +82,7 @@ services:
     #     window: 120s
     restart: unless-stopped
 
+  # -------------------------- Accident monitor DB ------------------------ #
 
   accident-monitor-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -115,47 +116,20 @@ services:
     command: >
       bash -c '
       /opt/mssql-tools18/bin/sqlcmd -C -S accident-monitor-db -U sa -P "$${SA_PASSWORD}" -d master -i docker-entrypoint-initdb.d/init.sql;
-      echo "All done!";
-      '
+      echo "All done!";'
     networks:
       - net_sim
     restart: on-failure
-    
-
-  accident-monitor:
-    container_name: accident-monitor
-    build:
-      context: ./AccidentMonitoring/
-      dockerfile: Dockerfile
-    ports:
-      - "8081:5001" # web app
-    hostname: accident-monitor
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=accident-monitor-db;Database=AccidentMonitor;User Id=sa;Password=${Sa_Password:-#password123sdJwnwlk};
-      - ConnectionStrings__AccidentMonitorDBContext=Server=accident-monitor-db;Database=AccidentMonitor;User Id=sa;Password=${Sa_Password:-#password123sdJwnwlk};
-      - ConnectionStrings__AccidentMonitorDBContext__MigrationsHistoryTableName=__EFMigrationsHistory
-      - ConnectionStrings__AccidentMonitorDBContext__SchemaName=dbo
-    depends_on:
-      accident-monitor-db:
-        condition: service_healthy
-        restart: true 
-      mosquitto:
-        condition: service_healthy
-        restart: true
-    networks:
-      - net_sim
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:5001/health || exit 1"]
-      interval: 30s
-      retries: 5
-      start_period: 20s
-      timeout: 10s
 
 networks:
   net_sim:
     driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br0
 volumes:
   accident_monitor_data:
-  
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /home/accident_monitor_data
+#       o: bind

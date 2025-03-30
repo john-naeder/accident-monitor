@@ -11,7 +11,7 @@ namespace AccidentMonitoring.Infrastructure.MQTT
         public string Protocol { get; set; } = "mqtt";
         public int Port { get; set; } = 1883;
         public bool UseTls { get; set; } = false;
-        public MqttProtocolVersion ProtocolVersion { get; set; } = MqttProtocolVersion.V500;
+        public int ProtocolVersion { get; set; } = 5;
         public X509Certificate2Collection? TrustChain { get; set; }
         public string? Username { get; set; }
         public string? Password { get; set; }

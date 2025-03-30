@@ -56,7 +56,8 @@ public static class DependencyInjection
         builder.Services.AddAuthorizationBuilder()
             .AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator));
 
-        builder.Services.Configure<MqttConnectionConfiguration>(builder.Configuration.GetSection("MqttConnectionConfig"));
+        builder.Services.Configure<MqttConnectionConfiguration>
+            (builder.Configuration.GetSection("MqttConnectionConfig"));
         builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<MqttConnectionConfiguration>>().Value);
         builder.Services.AddSingleton<IMqttServices, MqttClientService>();
         builder.Services.AddScoped<MqttClientContextInitializer>();
@@ -64,8 +65,8 @@ public static class DependencyInjection
         // ORService 
         builder.Services.AddSingleton<IORService, ORService>();
         var orsConnectionString = builder.Configuration.GetSection("ORSUri");
-        builder.Services.Configure<ApiConfiguration>(builder.Configuration.GetSection("ORS"));
+        builder.Services.Configure<ORSConfiguration>(builder.Configuration.GetSection("ORS"));
         builder.Services.AddSingleton(resolver =>
-            resolver.GetRequiredService<IOptions<ApiConfiguration>>().Value);
+            resolver.GetRequiredService<IOptions<ORSConfiguration>>().Value);
     }
 }
