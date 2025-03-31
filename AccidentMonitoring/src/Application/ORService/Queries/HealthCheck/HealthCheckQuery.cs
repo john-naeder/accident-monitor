@@ -12,7 +12,7 @@ public class HealthCheckQueryHandler(IORService orServices) : IRequestHandler<He
         try
         {
             return await _orServices.HealthCheck<HealthCheckResponseDto>();
-        } catch (ServiesUnavaileException)
+        } catch (ServicesUnavailableException)
         {
             return new HealthCheckResponseDto
             {

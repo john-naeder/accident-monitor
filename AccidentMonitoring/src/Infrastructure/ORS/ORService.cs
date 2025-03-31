@@ -14,7 +14,7 @@ public class ORService(ORSConfiguration options) : IORService
         var response = await _httpClient.GetAsync($"{options.Uri}/status");
         if (!response.IsSuccessStatusCode)
         {
-            throw new ServiesUnavaileException();
+            throw new ServicesUnavailableException();
         }
 
         var responseContent = await response.Content.ReadAsStringAsync();
@@ -29,7 +29,7 @@ public class ORService(ORSConfiguration options) : IORService
         var responseContent = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
-            throw new ServiesUnavaileException();
+            throw new ServicesUnavailableException();
         }
         var result = JsonSerializer.Deserialize<TResponse>(responseContent);
         return result!;
@@ -37,14 +37,16 @@ public class ORService(ORSConfiguration options) : IORService
 
     public async Task<TResponse> GetDefaultRoutingDirectionAsync<TResponse>(string profile, GetDirectionDefaultRequestDto request)
     {
-        var url = $"{options.Uri}/directions/{profile}?start={Uri.EscapeDataString(request.StartingCoordinate)}&end={Uri.EscapeDataString(request.DestinationCoordinate)}";
+        string  baseUri = $"{options.Uri}";        // Loại bỏ dấu "/" ở cuối
+
+        var url = baseUri.TrimEnd('/') + $":{options.Port}{options.BasePath}/directions/{profile}?start={Uri.EscapeDataString(request.StartingCoordinate)}&end={Uri.EscapeDataString(request.DestinationCoordinate)}";
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
         var response = await _httpClient.SendAsync(requestMessage);
         var responseContent = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new ServiesUnavaileException();
+            throw new ServicesUnavailableException(url);
         }
 
         var result = JsonSerializer.Deserialize<TResponse>(responseContent);

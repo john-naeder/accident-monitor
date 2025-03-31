@@ -15,7 +15,7 @@ public class CustomExceptionHandler : IExceptionHandler
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
-                { typeof(ServiesUnavaileException), HandleServiceUnavailableException },
+                { typeof(ServicesUnavailableException), HandleServiceUnavailableException },
                 { typeof(BadRequestException), HandleBadRequestException },
                 { typeof(InternalServerErrorException), HandleInternalServerErrorException },
                 { typeof(UnknownException), HandleUnknownException }
@@ -124,7 +124,7 @@ public class CustomExceptionHandler : IExceptionHandler
         await httpContext.Response.WriteAsJsonAsync(new ProblemDetails
         {
             Status = StatusCodes.Status503ServiceUnavailable,
-            Title = "Service Unavailable",
+            Title = "Service Unavailable. " + ex.Message,
             Type = "https://tools.ietf.org/html/rfc7231#section-6.6.4"
         });
     }

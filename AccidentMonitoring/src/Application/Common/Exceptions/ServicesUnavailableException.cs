@@ -1,5 +1,6 @@
 ﻿namespace AccidentMonitoring.Application.Common.Exceptions;
-public class ServiesUnavaileException : Exception
+public class ServicesUnavailableException : Exception
 {
-    public ServiesUnavaileException() : base() { }
+    public ServicesUnavailableException() : base() { }
+    public ServicesUnavailableException(string message) : base(message) { }
 }

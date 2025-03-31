@@ -165,8 +165,9 @@ namespace AccidentMonitoring.Infrastructure.MQTT
                         break;
                     }
                 }
-                catch (OperationCanceledException)
+                catch (OperationCanceledException ex)
                 {
+                    _logger.LogError(ex, "Failed to reconnect to MQTT broker: ");
                     return;
                 }
                 catch (Exception ex)

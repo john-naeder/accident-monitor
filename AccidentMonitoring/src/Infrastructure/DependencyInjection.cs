@@ -19,8 +19,9 @@ public static class DependencyInjection
 {
     public static void AddInfrastructureServices(this IHostApplicationBuilder builder)
     {
-        var dbConnectionString = builder.Configuration.GetConnectionString("AccidentMonitorDB");
-        Guard.Against.Null(dbConnectionString, message: "Connection string 'AccidentMonitorDB' not found.");
+        var connectionStrings = builder.Configuration.GetConnectionString("AccidentMonitorDB");
+
+        Guard.Against.Null(connectionStrings, message: "Connection string 'AccidentMonitorDB' not found.");
 
         builder.Services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         builder.Services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
@@ -28,7 +29,7 @@ public static class DependencyInjection
         builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-            options.UseSqlServer(dbConnectionString);
+            options.UseSqlServer(connectionStrings);
             options.ConfigureWarnings(warnings =>
                warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         });
