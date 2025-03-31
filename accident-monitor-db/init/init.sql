@@ -1,9 +1,12 @@
 USE [master];
 GO
-
-IF NOT EXISTS (SELECT * FROM sys.sql_logins WHERE name = 'newuser')
-BEGIN
-    CREATE LOGIN [newuser] WITH PASSWORD = '#password123sdJwnwlk', CHECK_POLICY = OFF;
-    ALTER SERVER ROLE [sysadmin] ADD MEMBER [newuser];
-END
+-- Create a new database called 'AccidentMonitorDB'
+-- Connect to the 'master' database to run this snippet
+-- Create the new database if it does not exist already
+IF NOT EXISTS (
+    SELECT name
+        FROM sys.databases
+        WHERE name = N'AccidentMonitorDB'
+)
+CREATE DATABASE AccidentMonitorDB
 GO
