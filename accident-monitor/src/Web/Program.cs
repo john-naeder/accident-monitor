@@ -38,6 +38,10 @@ public class Program
             settings.DocumentPath = "/api/specification.json";
         });
 
+        app.MapRazorPages();
+
+        app.MapFallbackToFile("index.html");
+
         app.UseExceptionHandler(options => { });
 
         app.Map("/", () => Results.Redirect("/api"));

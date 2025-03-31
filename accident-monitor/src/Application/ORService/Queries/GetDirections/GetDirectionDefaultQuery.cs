@@ -1,5 +1,6 @@
 ﻿using AccidentMonitoring.Application.Common.Interfaces;
-using AccidentMonitoring.Application.DTOs;
+using AccidentMonitoring.Application.ORService.Queries.GetDirections.Dto;
+using AccidentMonitoring.Application.ORService.Queries.GetDirections.Dtos;
 
 namespace AccidentMonitoring.Application.ORService.Queries.GetDirections
 {

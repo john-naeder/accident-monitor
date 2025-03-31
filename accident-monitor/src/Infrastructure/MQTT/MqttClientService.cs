@@ -11,13 +11,13 @@ using AccidentMonitoring.Application.ORService.Queries.GetDirections;
 using System.Net.Sockets;
 using MQTTnet.Formatter;
 using System.Text.Json;
-using AccidentMonitoring.Application.DTOs;
+using AccidentMonitoring.Application.ORService.Queries.GetDirections.Dtos;
 
 
 namespace AccidentMonitoring.Infrastructure.MQTT
 {
     // TODO: Refactor: remove IORService from this to clean code and make it more testable
-    public class MqttClientService : IMqttServices, IAsyncDisposable, IDisposable
+    public class MqttClientService : IMqttService, IAsyncDisposable, IDisposable
     {
         private readonly IMqttClient _mqttClient;
         private readonly ILogger _logger;

@@ -1,7 +1,7 @@
 ﻿using AccidentMonitoring.Domain.Entities.MapStuff;
 using AccidentMonitoring.Domain.Entities.MapStuff.Polygons;
 
-namespace AccidentMonitoring.Application.AvoidPolygons.Dtos;
+namespace AccidentMonitoring.Application.Accident.Dtos;
 
 public class AvoidPolygonsDto(BlockPolygon blockPolygon, string type)
 {

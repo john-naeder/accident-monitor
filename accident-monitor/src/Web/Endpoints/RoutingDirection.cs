@@ -1,5 +1,6 @@
-﻿using AccidentMonitoring.Application.DTOs;
-using AccidentMonitoring.Application.ORService.Queries.GetDirections;
+﻿using AccidentMonitoring.Application.ORService.Queries.GetDirections;
+using AccidentMonitoring.Application.ORService.Queries.GetDirections.Dto;
+using AccidentMonitoring.Application.ORService.Queries.GetDirections.Dtos;
 using AccidentMonitoring.Application.ORService.Queries.GetStatus;
 using AccidentMonitoring.Application.ORService.Queries.HealthCheck;
 using Microsoft.AspNetCore.Http.HttpResults;

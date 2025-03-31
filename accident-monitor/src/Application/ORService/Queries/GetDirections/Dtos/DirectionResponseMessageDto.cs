@@ -1,6 +1,6 @@
 ﻿using AccidentMonitoring.Application.ORService.Queries.GetDirections;
 
-namespace AccidentMonitoring.Application.DTOs
+namespace AccidentMonitoring.Application.ORService.Queries.GetDirections.Dtos
 {
     public class DirectionDefaultCutResponseDto
     {

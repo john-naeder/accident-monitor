@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace AccidentMonitoring.Application.ORService.Queries.GetDirections;
+namespace AccidentMonitoring.Application.ORService.Queries.GetDirections.Dto;
 public class GetDirectionDefaultRequestDto : IParsable<GetDirectionDefaultRequestDto>
 {
     /// <summary>

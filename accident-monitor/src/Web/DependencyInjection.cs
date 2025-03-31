@@ -15,9 +15,9 @@ public static class DependencyInjection
         builder.Services.AddScoped<IUser, CurrentUser>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+        builder.Services.AddRazorPages();
 
-
-        // Customise default API behaviour
+        // Customize default API behavior
         builder.Services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
 

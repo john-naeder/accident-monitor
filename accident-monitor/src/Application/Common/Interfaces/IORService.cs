@@ -1,4 +1,4 @@
-﻿using AccidentMonitoring.Application.ORService.Queries.GetDirections;
+﻿using AccidentMonitoring.Application.ORService.Queries.GetDirections.Dto;
 
 namespace AccidentMonitoring.Application.Common.Interfaces;
 public interface IORService : IExternalServices

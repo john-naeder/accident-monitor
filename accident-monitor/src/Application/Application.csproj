@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AvoidPolygons\Mappers\" />
+    <Folder Include="Accident\Mappers\" />
   </ItemGroup>
 
 </Project>

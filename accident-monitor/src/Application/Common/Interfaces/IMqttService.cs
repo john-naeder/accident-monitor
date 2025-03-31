@@ -2,7 +2,7 @@
 
 namespace AccidentMonitoring.Application.Common.Interfaces;
 
-public interface IMqttServices : IExternalServices
+public interface IMqttService : IExternalServices
 {
     Task<ServiceResult> StartAsync();
     Task<ServiceResult> ConnectAsync();

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using AccidentMonitoring.Domain.Entities.MapStuff;
 
-namespace AccidentMonitoring.Application.ORService.Queries.GetDirections;
+namespace AccidentMonitoring.Application.ORService.Queries.GetDirections.Dto;
 public class GetDirectionAdvanceRequestDto
 {
     [JsonPropertyName("profile")]

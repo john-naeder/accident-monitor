@@ -20,11 +20,11 @@ public static class InitializerExtensions
 public class MqttClientContextInitializer
 {
     private readonly ILogger<MqttClientContextInitializer> _logger;
-    private readonly IMqttServices _mqttServices;
+    private readonly IMqttService _mqttServices;
 
     public MqttClientContextInitializer(
         ILogger<MqttClientContextInitializer> logger,
-        IMqttServices mqttServices)
+        IMqttService mqttServices)
     {
         _logger = logger;
         _mqttServices = mqttServices;

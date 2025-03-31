@@ -1,5 +1,4 @@
-﻿using System;
-using AccidentMonitoring.Application.Common.Interfaces;
+﻿using AccidentMonitoring.Application.Common.Interfaces;
 using AccidentMonitoring.Domain.Constants;
 using AccidentMonitoring.Infrastructure.Data;
 using AccidentMonitoring.Infrastructure.Data.Interceptors;
@@ -60,7 +59,7 @@ public static class DependencyInjection
         builder.Services.Configure<MqttConnectionConfiguration>
             (builder.Configuration.GetSection("MqttConnectionConfig"));
         builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<MqttConnectionConfiguration>>().Value);
-        builder.Services.AddSingleton<IMqttServices, MqttClientService>();
+        builder.Services.AddSingleton<IMqttService, MqttClientService>();
         builder.Services.AddScoped<MqttClientContextInitializer>();
 
         // ORService 

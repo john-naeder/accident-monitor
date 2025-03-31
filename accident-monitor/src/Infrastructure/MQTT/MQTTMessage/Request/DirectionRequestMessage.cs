@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using AccidentMonitoring.Application.ORService.Queries.GetDirections;
+using AccidentMonitoring.Application.ORService.Queries.GetDirections.Dto;
 
 namespace AccidentMonitoring.Application.ORService.MQTT.Request;
 public class DirectionRequestMessage
