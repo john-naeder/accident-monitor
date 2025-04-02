@@ -9,6 +9,7 @@ namespace AccidentMonitoring.Infrastructure.Data.Configurations.MapStuff
         public void Configure(EntityTypeBuilder<PolygonCoordinate> builder)
         {
             builder.Property(v => v.Id)
+                .HasColumnName("Guid")
                 .ValueGeneratedOnAdd();
 
             builder.HasOne(pc => pc.BlockPolygon)
@@ -16,13 +17,13 @@ namespace AccidentMonitoring.Infrastructure.Data.Configurations.MapStuff
                 .HasForeignKey(pc => pc.BlockPolygonId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.OwnsOne(pc => pc.Coordinate, coordBuilder =>
+            builder.OwnsOne(pc => pc.Coordinate, coordinateBuilder =>
             {
-                coordBuilder.Property(c => c.Longitude)
+                coordinateBuilder.Property(c => c.Longitude)
                     .HasColumnName("Longitude")
                     .IsRequired();
 
-                coordBuilder.Property(c => c.Latitude)
+                coordinateBuilder.Property(c => c.Latitude)
                     .HasColumnName("Latitude")
                     .IsRequired();
             });

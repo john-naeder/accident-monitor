@@ -4,19 +4,16 @@ using AccidentMonitoring.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AccidentMonitoring.Infrastructure.Data.Migrations
+namespace AccidentMonitoring.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250326162718_AddAccidentEntity")]
-    partial class AddAccidentEntity
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,11 +24,10 @@ namespace AccidentMonitoring.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.AccidentDetails", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Guid");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
@@ -52,11 +48,10 @@ namespace AccidentMonitoring.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.AccidentEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Guid");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
@@ -93,19 +88,21 @@ namespace AccidentMonitoring.Infrastructure.Data.Migrations
                     b.ToTable("Accidents");
                 });
 
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.AccidentVehicle", b =>
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.AccidentInvolved", b =>
                 {
-                    b.Property<int>("AccidentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VehicleId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Guid");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("VehicleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DriverCitizenId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AccidentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
@@ -119,25 +116,104 @@ namespace AccidentMonitoring.Infrastructure.Data.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AccidentId", "VehicleId", "Id");
+                    b.HasKey("Id", "VehicleId", "DriverCitizenId");
+
+                    b.HasIndex("AccidentId");
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("AccidentVehicles");
+                    b.ToTable("AccidentInvolved");
                 });
 
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.VehicleEntity", b =>
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.CitizenEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Guid");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("CitizenIdentityNumber")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsMale")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nationality")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PlaceOfOrigin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlaceOfResidence")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VerifiedPhoneNumber")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CitizenIdentityNumber")
+                        .IsUnique();
+
+                    b.HasIndex("VerifiedPhoneNumber")
+                        .IsUnique()
+                        .HasFilter("[VerifiedPhoneNumber] IS NOT NULL");
+
+                    b.ToTable("Citizens");
+                });
+
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.VehicleEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Guid");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChassisNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EngineNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("LastModified")
@@ -148,27 +224,44 @@ namespace AccidentMonitoring.Infrastructure.Data.Migrations
 
                     b.Property<string>("LicensePlate")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RegistrationCertificateNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VehicleOwnerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LicensePlate")
                         .IsUnique();
 
+                    b.HasIndex("RegistrationCertificateNumber")
+                        .IsUnique();
+
                     b.ToTable("Vehicles");
                 });
 
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.BlockPolygon", b =>
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.BlockPolygon", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Guid");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccidentId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AccidentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
@@ -187,19 +280,18 @@ namespace AccidentMonitoring.Infrastructure.Data.Migrations
                     b.HasIndex("AccidentId")
                         .IsUnique();
 
-                    b.ToTable("BlockPolygon");
+                    b.ToTable("BlockPolygons");
                 });
 
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.PolygonCoordinate", b =>
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.PolygonCoordinate", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Guid");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BlockPolygonId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BlockPolygonId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
@@ -212,95 +304,12 @@ namespace AccidentMonitoring.Infrastructure.Data.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Latitude")
-                        .HasColumnType("real");
-
-                    b.Property<float>("Longitude")
-                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BlockPolygonId");
 
-                    b.ToTable("PolygonCoordinate");
-                });
-
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Todo.TodoItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Done")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ListId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("Reminder")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ListId");
-
-                    b.ToTable("TodoItems");
-                });
-
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Todo.TodoList", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TodoLists");
+                    b.ToTable("PolygonCoordinates");
                 });
 
             modelBuilder.Entity("AccidentMonitoring.Infrastructure.Identity.ApplicationUser", b =>
@@ -501,78 +510,86 @@ namespace AccidentMonitoring.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.AccidentVehicle", b =>
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.AccidentInvolved", b =>
                 {
                     b.HasOne("AccidentMonitoring.Domain.Entities.Accident.AccidentEntity", "Accident")
-                        .WithMany("AccidentVehicles")
+                        .WithMany("AccidentInvolved")
                         .HasForeignKey("AccidentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AccidentMonitoring.Domain.Entities.Accident.CitizenEntity", "DriverInvolved")
+                        .WithMany("AccidentsInvolved")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("AccidentMonitoring.Domain.Entities.Accident.VehicleEntity", "Vehicle")
-                        .WithMany("AccidentVehicles")
+                    b.HasOne("AccidentMonitoring.Domain.Entities.Accident.VehicleEntity", "VehicleInvolved")
+                        .WithMany("AccidentInvolved")
                         .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Accident");
 
-                    b.Navigation("Vehicle");
+                    b.Navigation("DriverInvolved");
+
+                    b.Navigation("VehicleInvolved");
                 });
 
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.BlockPolygon", b =>
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.VehicleEntity", b =>
+                {
+                    b.HasOne("AccidentMonitoring.Domain.Entities.Accident.CitizenEntity", "Owner")
+                        .WithMany("Vehicles")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.BlockPolygon", b =>
                 {
                     b.HasOne("AccidentMonitoring.Domain.Entities.Accident.AccidentEntity", "Accident")
                         .WithOne("BlockPolygon")
-                        .HasForeignKey("AccidentMonitoring.Domain.Entities.MapStuff.BlockPolygon", "AccidentId")
+                        .HasForeignKey("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.BlockPolygon", "AccidentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Accident");
                 });
 
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.PolygonCoordinate", b =>
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.PolygonCoordinate", b =>
                 {
-                    b.HasOne("AccidentMonitoring.Domain.Entities.MapStuff.BlockPolygon", "BlockPolygon")
-                        .WithMany("AvoidCoordinates")
+                    b.HasOne("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.BlockPolygon", "BlockPolygon")
+                        .WithMany("Coordinates")
                         .HasForeignKey("BlockPolygonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BlockPolygon");
-                });
-
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Todo.TodoItem", b =>
-                {
-                    b.HasOne("AccidentMonitoring.Domain.Entities.Todo.TodoList", "List")
-                        .WithMany("Items")
-                        .HasForeignKey("ListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("List");
-                });
-
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Todo.TodoList", b =>
-                {
-                    b.OwnsOne("AccidentMonitoring.Domain.ValueObjects.Colour", "Colour", b1 =>
+                    b.OwnsOne("AccidentMonitoring.Domain.Entities.MapStuff.Coordinate", "Coordinate", b1 =>
                         {
-                            b1.Property<int>("TodoListId")
-                                .HasColumnType("int");
+                            b1.Property<Guid>("PolygonCoordinateId")
+                                .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Code")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                            b1.Property<float>("Latitude")
+                                .HasColumnType("real")
+                                .HasColumnName("Latitude");
 
-                            b1.HasKey("TodoListId");
+                            b1.Property<float>("Longitude")
+                                .HasColumnType("real")
+                                .HasColumnName("Longitude");
 
-                            b1.ToTable("TodoLists");
+                            b1.HasKey("PolygonCoordinateId");
+
+                            b1.ToTable("PolygonCoordinates");
 
                             b1.WithOwner()
-                                .HasForeignKey("TodoListId");
+                                .HasForeignKey("PolygonCoordinateId");
                         });
 
-                    b.Navigation("Colour")
+                    b.Navigation("BlockPolygon");
+
+                    b.Navigation("Coordinate")
                         .IsRequired();
                 });
 
@@ -629,24 +646,27 @@ namespace AccidentMonitoring.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.AccidentEntity", b =>
                 {
-                    b.Navigation("AccidentVehicles");
+                    b.Navigation("AccidentInvolved");
 
-                    b.Navigation("BlockPolygon");
+                    b.Navigation("BlockPolygon")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.CitizenEntity", b =>
+                {
+                    b.Navigation("AccidentsInvolved");
+
+                    b.Navigation("Vehicles");
                 });
 
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.VehicleEntity", b =>
                 {
-                    b.Navigation("AccidentVehicles");
+                    b.Navigation("AccidentInvolved");
                 });
 
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.BlockPolygon", b =>
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.BlockPolygon", b =>
                 {
-                    b.Navigation("AvoidCoordinates");
-                });
-
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Todo.TodoList", b =>
-                {
-                    b.Navigation("Items");
+                    b.Navigation("Coordinates");
                 });
 #pragma warning restore 612, 618
         }

@@ -75,92 +75,119 @@ public class ApplicationDbContextInitializer(
                 await userManager.AddToRolesAsync(administrator, [administratorRole.Name]);
             }
         }
-        if (!context.Vehicles.Any())
-        {
-            context.Vehicles.Add(new VehicleEntity
-            {
-                LicensePlate = "29A-12345",
-            });
-            context.Vehicles.Add(new VehicleEntity
-            {
-                LicensePlate = "30A-12345",
-            });
-            await context.SaveChangesAsync();
-        }
+        //if (!context.Citizens.Any())
+        //{
+        //    context.Citizens.AddRange(
+        //        new CitizenEntity(
+        //            "123456789012",
+        //            "Nguyễn Văn A",
+        //            new DateOnly(1990, 5, 20),
+        //            true,
+        //            "Vietnam",
+        //            "Hà Nội",
+        //            "Hồ Chí Minh",
+        //            "0987654321"
+        //        ),
+        //        new CitizenEntity(
+        //            "234567890123",
+        //            "Trần Thị B",
+        //            new DateOnly(1995, 8, 15),
+        //            false,
+        //            "Vietnam",
+        //            "Đà Nẵng",
+        //            "Hà Nội",
+        //            "0976543210"
+        //        ),
+        //        new CitizenEntity(
+        //            "345678901234",
+        //            "Lê Văn C",
+        //            new DateOnly(1985, 12, 10),
+        //            true,
+        //            "Vietnam",
+        //            "Hải Phòng",
+        //            "Hải Phòng",
+        //            "0965432109"
+        //        )
+        //    );
 
-        if (!context.Accidents.Any())
-        {
+        //    await context.SaveChangesAsync();
+        //}
 
-            var accident = new AccidentEntity(
-                DateTime.Now,
-                106.6564777493477F,
-                10.801198744414963F,
-                AccidentSeverity.Medium,
-                true,
-                AccidentResolvedStatus.Unresolved
-            );
 
-            if (accident.IsBlockingWay)
-            {
-                var blockPolygon = new BlockPolygon
-                {
-                    Accident = accident,
-                    Coordinates = []
-                };
+        //if (!context.Accidents.Any())
+        //{
 
-                var blockPolygonCoordinates = new List<PolygonCoordinate> {
-                    new (
-                        blockPolygon.Id,
-                        106.6564777493477F,
-                        10.801198744414963F
-                    ),
-                    new (
-                        blockPolygon.Id,
-                        106.6569777493477F,
-                        10.801198744414963F
-                    ),
-                    new (
-                        blockPolygon.Id,
-                        106.6569777493477F,
-                        10.801698744414963F
-                    ),
-                    new (
-                        blockPolygon.Id,
-                        106.6564777493477F,
-                        10.801698744414963F
-                    ),
-                    new (
-                        blockPolygon.Id,
-                        106.6564777493477F,
-                        10.801198744414963F
-                    )
-                };
-                blockPolygon.Coordinates = blockPolygonCoordinates;
-                accident.BlockPolygon = blockPolygon;
-            }
+        //    var accident = new AccidentEntity(
+        //        DateTime.Now,
+        //        106.6564777493477F,
+        //        10.801198744414963F,
+        //        AccidentSeverity.Medium,
+        //        true,
+        //        AccidentResolvedStatus.Unresolved
+        //    );
 
-            context.Accidents.Add(accident);
+        //    if (accident.IsBlockingWay)
+        //    {
+        //        var blockPolygon = new BlockPolygon
+        //        {
+        //            Accident = accident,
+        //            Coordinates = []
+        //        };
 
-            var vehicle1 = context.Vehicles.FirstOrDefault(v => v.Id == 1);
-            var vehicle2 = context.Vehicles.FirstOrDefault(v => v.Id == 2);
+        //        var blockPolygonCoordinates = new List<PolygonCoordinate> {
+        //            new (
+        //                blockPolygon.Id,
+        //                106.6564777493477F,
+        //                10.801198744414963F
+        //            ),
+        //            new (
+        //                blockPolygon.Id,
+        //                106.6569777493477F,
+        //                10.801198744414963F
+        //            ),
+        //            new (
+        //                blockPolygon.Id,
+        //                106.6569777493477F,
+        //                10.801698744414963F
+        //            ),
+        //            new (
+        //                blockPolygon.Id,
+        //                106.6564777493477F,
+        //                10.801698744414963F
+        //            ),
+        //            new (
+        //                blockPolygon.Id,
+        //                106.6564777493477F,
+        //                10.801198744414963F
+        //            )
+        //        };
+        //        blockPolygon.Coordinates = blockPolygonCoordinates;
+        //        accident.BlockPolygon = blockPolygon;
+        //    }
 
-            if (vehicle1 != null)
-            {
-                accident.AccidentVehicles.Add(new AccidentVehicle
-                {
-                    Accident = accident,
-                    Vehicle = vehicle1,
-                });
-            }
-            if (vehicle2 != null)
-            {
-                accident.AccidentVehicles.Add(new AccidentVehicle
-                {
-                    Accident = accident,
-                    Vehicle = vehicle2,
-                });
-            }
-            await context.SaveChangesAsync();
-        }
+        //    context.Accidents.Add(accident);
+
+        //    //var vehicle = context.Vehicles.FromSqlRaw(
+        //    //    "SELECT * FROM Vehicles").ToArray();
+
+        //    //if (vehicle[0] != null)
+        //    //{
+        //    //    accident.AccidentInvolved.Add(new AccidentInvolved
+        //    //    {
+        //    //        AccidentId = accident.Id,
+        //    //        VehicleId = vehicle[0].Id,
+        //    //        DriverCitizenId = 123456789012,
+        //    //    });
+        //    //}
+        //    //if (vehicle2 != null)
+        //    //{
+        //    //    accident.AccidentVehicles.Add(new AccidentVehicle
+        //    //    {
+        //    //        Accident = accident,
+        //    //        Vehicle = vehicle2,
+        //    //    });
+        //    //}
+        //    await context.SaveChangesAsync();
+        //}
     }
 }

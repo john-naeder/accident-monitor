@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace AccidentMonitoring.Application.Accident.Dtos;
-public class AccidentAlertDto
+public class AccidentReportDto
 {
     [JsonPropertyName("vehicle_id")]
     public required string VehicleId { get; set; }

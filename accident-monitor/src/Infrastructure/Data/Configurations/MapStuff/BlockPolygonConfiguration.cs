@@ -8,8 +8,13 @@ public class BlockPolygonConfiguration : IEntityTypeConfiguration<BlockPolygon>
     public void Configure(EntityTypeBuilder<BlockPolygon> builder)
     {
         builder.Property(bp => bp.Id)
+            .HasColumnName("Guid")
             .ValueGeneratedOnAdd();
+
         builder.HasKey(bp => bp.Id);
+
+        builder.Property(bp => bp.AccidentId).IsRequired();
+
         builder.HasOne(bp => bp.Accident)
             .WithOne(a => a.BlockPolygon)
             .HasForeignKey<BlockPolygon>(bp => bp.AccidentId)

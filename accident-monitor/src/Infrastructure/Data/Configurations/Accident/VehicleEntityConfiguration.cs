@@ -9,17 +9,19 @@ public class VehicleEntityConfiguration : IEntityTypeConfiguration<VehicleEntity
     {
         builder.HasKey(v => v.Id);
         builder.Property(v => v.Id)
+            .HasColumnName("Guid")
             .ValueGeneratedOnAdd();
 
         builder.HasIndex(v => v.LicensePlate).IsUnique();
-        builder.Property(v => v.LicensePlate)
-            .HasMaxLength(10)
-            .IsRequired();
+        builder.HasIndex(v => v.RegistrationCertificateNumber).IsUnique();
 
-
-        builder.HasMany(v => v.AccidentVehicles) 
-            .WithOne(av => av.Vehicle)
-            .HasForeignKey(av => av.VehicleId)
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.Property(a => a.VehicleOwnerName).IsRequired();
+        builder.Property(a => a.Type).IsRequired();
+        builder.Property(a => a.RegistrationCertificateNumber).IsRequired();
+        builder.Property(a => a.Model).IsRequired();
+        builder.Property(a => a.LicensePlate).IsRequired();
+        builder.Property(a => a.EngineNumber).IsRequired();
+        builder.Property(a => a.ChassisNumber).IsRequired();
+        builder.Property(a => a.Brand).IsRequired();   
     }
 }

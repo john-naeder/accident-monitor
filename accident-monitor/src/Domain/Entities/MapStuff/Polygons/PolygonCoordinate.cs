@@ -2,17 +2,17 @@
 {
     public class PolygonCoordinate : BaseAuditableEntity, IEquatable<PolygonCoordinate>
     {
-        public int BlockPolygonId { get; set; }
+        public PolygonCoordinate() {}
+        public Guid BlockPolygonId { get; set; }
         public Coordinate Coordinate { get; set; } = new Coordinate();
         public virtual BlockPolygon BlockPolygon { get; set; } = null!;
 
-        public PolygonCoordinate() { }
-
-        public PolygonCoordinate(int blockPolygonId, float longitude, float latitude)
+        public PolygonCoordinate(Guid blockPolygonId, float longitude, float latitude)
         {
             BlockPolygonId = blockPolygonId;
             Coordinate = new Coordinate(longitude, latitude);
         }
+
         public bool Equals(PolygonCoordinate? other)
         {
             return other is not null && Coordinate.Longitude 

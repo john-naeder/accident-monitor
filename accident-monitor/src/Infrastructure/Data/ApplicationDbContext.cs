@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using AccidentMonitoring.Application.Common.Interfaces;
 using AccidentMonitoring.Domain.Entities.Accident;
+using AccidentMonitoring.Domain.Entities.MapStuff.Polygons;
 using AccidentMonitoring.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +12,13 @@ namespace AccidentMonitoring.Infrastructure.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
     : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
 {
-    public DbSet<AccidentEntity> Accidents => Set<AccidentEntity>();
-
-    public DbSet<AccidentDetails> AccidentDetails => Set<AccidentDetails>();
-
+    public DbSet<CitizenEntity> Citizens => Set<CitizenEntity>();
     public DbSet<VehicleEntity> Vehicles => Set<VehicleEntity>();
-
-    public DbSet<AccidentVehicle> AccidentVehicles => Set<AccidentVehicle>();
+    public DbSet<AccidentEntity> Accidents => Set<AccidentEntity>();
+    public DbSet<AccidentDetails> AccidentDetails => Set<AccidentDetails>();
+    public DbSet<AccidentInvolved> AccidentInvolved => Set<AccidentInvolved>();
+    public DbSet<BlockPolygon> BlockPolygons => Set<BlockPolygon>();
+    public DbSet<PolygonCoordinate> PolygonCoordinates => Set<PolygonCoordinate>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
