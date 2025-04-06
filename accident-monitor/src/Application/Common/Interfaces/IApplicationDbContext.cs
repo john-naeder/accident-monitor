@@ -9,7 +9,6 @@ public interface IApplicationDbContext
     DbSet<AccidentEntity> Accidents { get; }
     DbSet<AccidentDetails> AccidentDetails { get; }
     DbSet<AccidentInvolved> AccidentInvolved { get; }
-    DbSet<BlockPolygon> BlockPolygons { get; }
     DbSet<PolygonCoordinate> PolygonCoordinates { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

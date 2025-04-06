@@ -5,8 +5,6 @@ using AccidentMonitoring.Domain.Entities.MapStuff.Polygons;
 using AccidentMonitoring.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 
 namespace AccidentMonitoring.Infrastructure.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
@@ -17,7 +15,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<AccidentEntity> Accidents => Set<AccidentEntity>();
     public DbSet<AccidentDetails> AccidentDetails => Set<AccidentDetails>();
     public DbSet<AccidentInvolved> AccidentInvolved => Set<AccidentInvolved>();
-    public DbSet<BlockPolygon> BlockPolygons => Set<BlockPolygon>();
     public DbSet<PolygonCoordinate> PolygonCoordinates => Set<PolygonCoordinate>();
 
     protected override void OnModelCreating(ModelBuilder builder)

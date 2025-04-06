@@ -12,9 +12,9 @@ public class AccidentInvolved : BaseAuditableEntity
         VehicleId = vehicleId;
         DriverCitizenId = driverInvolvedId;
     }
-    public Guid? AccidentId { get; set; }
-    public Guid? DriverCitizenId { get; set; }
-    public Guid? VehicleId { get; set; }
+    public Guid AccidentId { get; set; }
+    public Guid DriverCitizenId { get; set; }
+    public Guid VehicleId { get; set; }
     public virtual AccidentEntity Accident { get; set; } = null!;
     public virtual CitizenEntity DriverInvolved { get; set; } = null!;
     public virtual VehicleEntity VehicleInvolved { get; set; } = null!;

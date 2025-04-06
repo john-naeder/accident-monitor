@@ -7,9 +7,9 @@ public class AccidentInvolvedConfiguration : IEntityTypeConfiguration<AccidentIn
 {
     public void Configure(EntityTypeBuilder<AccidentInvolved> builder)
     {
-        builder.HasKey(ai => new { ai.Id, ai.VehicleId, ai.DriverCitizenId });
+        builder.HasKey(ai => new { ai.AccidentId, ai.VehicleId, ai.DriverCitizenId });
 
-        builder.Property(v => v.Id)
+        builder.Property(v => v.Guid)
             .HasColumnName("Guid")
             .ValueGeneratedOnAdd();
 

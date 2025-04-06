@@ -7,8 +7,8 @@ public class VehicleEntityConfiguration : IEntityTypeConfiguration<VehicleEntity
 {
     public void Configure(EntityTypeBuilder<VehicleEntity> builder)
     {
-        builder.HasKey(v => v.Id);
-        builder.Property(v => v.Id)
+        builder.HasKey(v => v.Guid);
+        builder.Property(v => v.Guid)
             .HasColumnName("Guid")
             .ValueGeneratedOnAdd();
 

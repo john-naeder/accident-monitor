@@ -98,7 +98,7 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                     Nationality = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PlaceOfOrigin = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlaceOfResidence = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VerifiedPhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    VerifiedPhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -110,11 +110,13 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BlockPolygons",
+                name: "PolygonCoordinates",
                 columns: table => new
                 {
                     Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AccidentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Latitude = table.Column<float>(type: "real", nullable: false),
+                    Longitude = table.Column<float>(type: "real", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -122,9 +124,9 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BlockPolygons", x => x.Guid);
+                    table.PrimaryKey("PK_PolygonCoordinates", x => x.Guid);
                     table.ForeignKey(
-                        name: "FK_BlockPolygons_Accidents_AccidentId",
+                        name: "FK_PolygonCoordinates_Accidents_AccidentId",
                         column: x => x.AccidentId,
                         principalTable: "Accidents",
                         principalColumn: "Guid",
@@ -250,7 +252,8 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                     Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VehicleOwnerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -260,45 +263,21 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Vehicles", x => x.Guid);
                     table.ForeignKey(
-                        name: "FK_Vehicles_Citizens_Guid",
-                        column: x => x.Guid,
+                        name: "FK_Vehicles_Citizens_OwnerId",
+                        column: x => x.OwnerId,
                         principalTable: "Citizens",
                         principalColumn: "Guid",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PolygonCoordinates",
-                columns: table => new
-                {
-                    Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BlockPolygonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Latitude = table.Column<float>(type: "real", nullable: false),
-                    Longitude = table.Column<float>(type: "real", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PolygonCoordinates", x => x.Guid);
-                    table.ForeignKey(
-                        name: "FK_PolygonCoordinates_BlockPolygons_BlockPolygonId",
-                        column: x => x.BlockPolygonId,
-                        principalTable: "BlockPolygons",
-                        principalColumn: "Guid",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AccidentInvolved",
                 columns: table => new
                 {
-                    Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccidentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DriverCitizenId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VehicleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AccidentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -306,7 +285,7 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AccidentInvolved", x => new { x.Guid, x.VehicleId, x.DriverCitizenId });
+                    table.PrimaryKey("PK_AccidentInvolved", x => new { x.AccidentId, x.VehicleId, x.DriverCitizenId });
                     table.ForeignKey(
                         name: "FK_AccidentInvolved_Accidents_AccidentId",
                         column: x => x.AccidentId,
@@ -314,8 +293,8 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                         principalColumn: "Guid",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AccidentInvolved_Citizens_Guid",
-                        column: x => x.Guid,
+                        name: "FK_AccidentInvolved_Citizens_DriverCitizenId",
+                        column: x => x.DriverCitizenId,
                         principalTable: "Citizens",
                         principalColumn: "Guid",
                         onDelete: ReferentialAction.Restrict);
@@ -328,9 +307,9 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AccidentInvolved_AccidentId",
+                name: "IX_AccidentInvolved_DriverCitizenId",
                 table: "AccidentInvolved",
-                column: "AccidentId");
+                column: "DriverCitizenId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AccidentInvolved_VehicleId",
@@ -377,12 +356,6 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlockPolygons_AccidentId",
-                table: "BlockPolygons",
-                column: "AccidentId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Citizens_CitizenIdentityNumber",
                 table: "Citizens",
                 column: "CitizenIdentityNumber",
@@ -392,19 +365,23 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                 name: "IX_Citizens_VerifiedPhoneNumber",
                 table: "Citizens",
                 column: "VerifiedPhoneNumber",
-                unique: true,
-                filter: "[VerifiedPhoneNumber] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PolygonCoordinates_BlockPolygonId",
+                name: "IX_PolygonCoordinates_AccidentId",
                 table: "PolygonCoordinates",
-                column: "BlockPolygonId");
+                column: "AccidentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_LicensePlate",
                 table: "Vehicles",
                 column: "LicensePlate",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_OwnerId",
+                table: "Vehicles",
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_RegistrationCertificateNumber",
@@ -450,13 +427,10 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "BlockPolygons");
+                name: "Accidents");
 
             migrationBuilder.DropTable(
                 name: "Citizens");
-
-            migrationBuilder.DropTable(
-                name: "Accidents");
         }
     }
 }

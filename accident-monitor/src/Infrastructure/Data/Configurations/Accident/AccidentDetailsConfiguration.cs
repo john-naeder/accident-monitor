@@ -7,8 +7,8 @@ public class AccidentDetailsConfiguration : IEntityTypeConfiguration<AccidentDet
 {
     public void Configure(EntityTypeBuilder<AccidentDetails> builder)
     {
-        builder.HasKey(v => v.Id);
-        builder.Property(v => v.Id)
+        builder.HasKey(v => v.Guid);
+        builder.Property(v => v.Guid)
             .HasColumnName("Guid")
             .ValueGeneratedOnAdd();
     }

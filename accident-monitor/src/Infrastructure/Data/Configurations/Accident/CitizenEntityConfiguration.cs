@@ -7,8 +7,8 @@ public class CitizenEntityConfiguration : IEntityTypeConfiguration<CitizenEntity
 {
     public void Configure(EntityTypeBuilder<CitizenEntity> builder)
     {
-        builder.HasKey(c => c.Id);
-        builder.Property(c => c.Id)
+        builder.HasKey(c => c.Guid);
+        builder.Property(c => c.Guid)
             .HasColumnName("Guid")
             .ValueGeneratedOnAdd();
 
@@ -34,14 +34,14 @@ public class CitizenEntityConfiguration : IEntityTypeConfiguration<CitizenEntity
         builder.Property(c => c.PlaceOfResidence)
             .IsRequired();
 
-        builder.HasMany(v => v.AccidentsInvolved)
-            .WithOne(av => av.DriverInvolved)
-            .HasForeignKey(av => av.Id)
-            .OnDelete(DeleteBehavior.Restrict);
-
         builder.HasMany(c => c.Vehicles)
             .WithOne(cv => cv.Owner)
-            .HasForeignKey(cv => cv.Id)
+            .HasForeignKey(cv => cv.OwnerId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(c => c.AccidentsInvolved)
+           .WithOne(av => av.DriverInvolved)
+           .HasForeignKey(av => av.DriverCitizenId)
+           .OnDelete(DeleteBehavior.Restrict);
     }
 }

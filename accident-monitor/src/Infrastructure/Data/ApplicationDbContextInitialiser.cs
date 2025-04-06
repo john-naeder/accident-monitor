@@ -1,6 +1,5 @@
 ﻿using AccidentMonitoring.Domain.Constants;
 using AccidentMonitoring.Domain.Entities.Accident;
-using AccidentMonitoring.Domain.Entities.MapStuff.Polygons;
 using AccidentMonitoring.Domain.Enums;
 using AccidentMonitoring.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
@@ -75,119 +74,121 @@ public class ApplicationDbContextInitializer(
                 await userManager.AddToRolesAsync(administrator, [administratorRole.Name]);
             }
         }
-        //if (!context.Citizens.Any())
-        //{
-        //    context.Citizens.AddRange(
-        //        new CitizenEntity(
-        //            "123456789012",
-        //            "Nguyễn Văn A",
-        //            new DateOnly(1990, 5, 20),
-        //            true,
-        //            "Vietnam",
-        //            "Hà Nội",
-        //            "Hồ Chí Minh",
-        //            "0987654321"
-        //        ),
-        //        new CitizenEntity(
-        //            "234567890123",
-        //            "Trần Thị B",
-        //            new DateOnly(1995, 8, 15),
-        //            false,
-        //            "Vietnam",
-        //            "Đà Nẵng",
-        //            "Hà Nội",
-        //            "0976543210"
-        //        ),
-        //        new CitizenEntity(
-        //            "345678901234",
-        //            "Lê Văn C",
-        //            new DateOnly(1985, 12, 10),
-        //            true,
-        //            "Vietnam",
-        //            "Hải Phòng",
-        //            "Hải Phòng",
-        //            "0965432109"
-        //        )
-        //    );
+        if (!context.Citizens.Any())
+        {
+            context.Citizens.AddRange(
+                new CitizenEntity(
+                    "123456789012",
+                    "Nguyễn Văn A",
+                    new DateOnly(1990, 5, 20),
+                    true,
+                    "Vietnam",
+                    "Hà Nội",
+                    "Hồ Chí Minh",
+                    "0987654321"
+                ),
+                new CitizenEntity(
+                    "234567890123",
+                    "Trần Thị B",
+                    new DateOnly(1995, 8, 15),
+                    false,
+                    "Vietnam",
+                    "Đà Nẵng",
+                    "Hà Nội",
+                    "0976543210"
+                ),
+                new CitizenEntity(
+                    "345678901234",
+                    "Lê Văn C",
+                    new DateOnly(1985, 12, 10),
+                    true,
+                    "Vietnam",
+                    "Hải Phòng",
+                    "Hải Phòng",
+                    "0965432109"
+                )
+            );
 
-        //    await context.SaveChangesAsync();
-        //}
+            await context.SaveChangesAsync();
+        }
+
+        if (!context.Vehicles.Any())
+        {
+            // Lấy list Citizens vừa tạo
+            var citizens = context.Citizens.ToList();
+
+            var vehicles = new[]
+            {
+            new VehicleEntity(
+                registrationCertificateNumber: "RCN-0001",
+                licensePlate: "30A-12345",
+                engineNumber: "ENG-1001",
+                chassisNumber: "CHS-1001",
+                type: "Car",
+                brand: "Toyota",
+                model: "Vios",
+                vehicleOwnerName: citizens[0].FullName,
+                address: "Hà Nội",
+                ownerId: citizens[0].Guid
+            ),
+            new VehicleEntity(
+                registrationCertificateNumber: "RCN-0002",
+                licensePlate: "43B-54321",
+                engineNumber: "ENG-2002",
+                chassisNumber: "CHS-2002",
+                type: "Motorbike",
+                brand: "Honda",
+                model: "Wave",
+                vehicleOwnerName: citizens[1].FullName,
+                address: "Đà Nẵng",
+                ownerId: citizens[1].Guid
+            ),
+            new VehicleEntity(
+                registrationCertificateNumber: "RCN-0003",
+                licensePlate: "15C-67890",
+                engineNumber: "ENG-3003",
+                chassisNumber: "CHS-3003",
+                type: "Truck",
+                brand: "Isuzu",
+                model: "Forward",
+                vehicleOwnerName: citizens[2].FullName,
+                address: "Hải Phòng",
+                ownerId : citizens[2].Guid
+            )
+        };
+
+            context.Vehicles.AddRange(vehicles);
+            await context.SaveChangesAsync();
+        }
 
 
-        //if (!context.Accidents.Any())
-        //{
+        if (!context.Accidents.Any())
+        {
+            var accident = new AccidentEntity(
+                DateTime.Now,
+                106.66069019038777F,
+                10.801754663322315F,
+                true,
+                AccidentSeverity.Medium,
+                AccidentResolvedStatus.Unresolved
+            );
 
-        //    var accident = new AccidentEntity(
-        //        DateTime.Now,
-        //        106.6564777493477F,
-        //        10.801198744414963F,
-        //        AccidentSeverity.Medium,
-        //        true,
-        //        AccidentResolvedStatus.Unresolved
-        //    );
+            context.Accidents.Add(accident);
 
-        //    if (accident.IsBlockingWay)
-        //    {
-        //        var blockPolygon = new BlockPolygon
-        //        {
-        //            Accident = accident,
-        //            Coordinates = []
-        //        };
+            var firstVehicle = context.Vehicles.FirstOrDefault();
+            var firstCitizen = context.Citizens.FirstOrDefault();
 
-        //        var blockPolygonCoordinates = new List<PolygonCoordinate> {
-        //            new (
-        //                blockPolygon.Id,
-        //                106.6564777493477F,
-        //                10.801198744414963F
-        //            ),
-        //            new (
-        //                blockPolygon.Id,
-        //                106.6569777493477F,
-        //                10.801198744414963F
-        //            ),
-        //            new (
-        //                blockPolygon.Id,
-        //                106.6569777493477F,
-        //                10.801698744414963F
-        //            ),
-        //            new (
-        //                blockPolygon.Id,
-        //                106.6564777493477F,
-        //                10.801698744414963F
-        //            ),
-        //            new (
-        //                blockPolygon.Id,
-        //                106.6564777493477F,
-        //                10.801198744414963F
-        //            )
-        //        };
-        //        blockPolygon.Coordinates = blockPolygonCoordinates;
-        //        accident.BlockPolygon = blockPolygon;
-        //    }
+            if (firstVehicle != null && firstCitizen != null)
+            {
+                accident.AccidentInvolved.Add(new AccidentInvolved
+                {
+                    AccidentId = accident.Guid,
+                    VehicleId = firstVehicle.Guid,
+                    DriverCitizenId = firstCitizen.Guid,
+                });
 
-        //    context.Accidents.Add(accident);
-
-        //    //var vehicle = context.Vehicles.FromSqlRaw(
-        //    //    "SELECT * FROM Vehicles").ToArray();
-
-        //    //if (vehicle[0] != null)
-        //    //{
-        //    //    accident.AccidentInvolved.Add(new AccidentInvolved
-        //    //    {
-        //    //        AccidentId = accident.Id,
-        //    //        VehicleId = vehicle[0].Id,
-        //    //        DriverCitizenId = 123456789012,
-        //    //    });
-        //    //}
-        //    //if (vehicle2 != null)
-        //    //{
-        //    //    accident.AccidentVehicles.Add(new AccidentVehicle
-        //    //    {
-        //    //        Accident = accident,
-        //    //        Vehicle = vehicle2,
-        //    //    });
-        //    //}
-        //    await context.SaveChangesAsync();
-        //}
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }

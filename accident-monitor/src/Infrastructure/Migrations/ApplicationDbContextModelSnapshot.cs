@@ -24,7 +24,7 @@ namespace AccidentMonitoring.Infrastructure.Migrations
 
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.AccidentDetails", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Guid");
@@ -41,14 +41,14 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.ToTable("AccidentDetails");
                 });
 
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.AccidentEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Guid");
@@ -83,25 +83,20 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.ToTable("Accidents");
                 });
 
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.AccidentInvolved", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Guid");
+                    b.Property<Guid>("AccidentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("VehicleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("DriverCitizenId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AccidentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("Created")
@@ -110,15 +105,20 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Guid");
+
                     b.Property<DateTimeOffset>("LastModified")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id", "VehicleId", "DriverCitizenId");
+                    b.HasKey("AccidentId", "VehicleId", "DriverCitizenId");
 
-                    b.HasIndex("AccidentId");
+                    b.HasIndex("DriverCitizenId");
 
                     b.HasIndex("VehicleId");
 
@@ -127,7 +127,7 @@ namespace AccidentMonitoring.Infrastructure.Migrations
 
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.CitizenEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Guid");
@@ -174,28 +174,29 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VerifiedPhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.HasIndex("CitizenIdentityNumber")
                         .IsUnique();
 
                     b.HasIndex("VerifiedPhoneNumber")
-                        .IsUnique()
-                        .HasFilter("[VerifiedPhoneNumber] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Citizens");
                 });
 
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.VehicleEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Guid");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Brand")
@@ -230,6 +231,9 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("RegistrationCertificateNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -242,10 +246,12 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.HasIndex("LicensePlate")
                         .IsUnique();
+
+                    b.HasIndex("OwnerId");
 
                     b.HasIndex("RegistrationCertificateNumber")
                         .IsUnique();
@@ -253,9 +259,9 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                     b.ToTable("Vehicles");
                 });
 
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.BlockPolygon", b =>
+            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.PolygonCoordinate", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Guid");
@@ -275,39 +281,9 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
-                    b.HasIndex("AccidentId")
-                        .IsUnique();
-
-                    b.ToTable("BlockPolygons");
-                });
-
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.PolygonCoordinate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Guid");
-
-                    b.Property<Guid>("BlockPolygonId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlockPolygonId");
+                    b.HasIndex("AccidentId");
 
                     b.ToTable("PolygonCoordinates");
                 });
@@ -515,11 +491,12 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                     b.HasOne("AccidentMonitoring.Domain.Entities.Accident.AccidentEntity", "Accident")
                         .WithMany("AccidentInvolved")
                         .HasForeignKey("AccidentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("AccidentMonitoring.Domain.Entities.Accident.CitizenEntity", "DriverInvolved")
                         .WithMany("AccidentsInvolved")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("DriverCitizenId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -540,35 +517,24 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                 {
                     b.HasOne("AccidentMonitoring.Domain.Entities.Accident.CitizenEntity", "Owner")
                         .WithMany("Vehicles")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.BlockPolygon", b =>
-                {
-                    b.HasOne("AccidentMonitoring.Domain.Entities.Accident.AccidentEntity", "Accident")
-                        .WithOne("BlockPolygon")
-                        .HasForeignKey("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.BlockPolygon", "AccidentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Accident");
-                });
-
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.PolygonCoordinate", b =>
                 {
-                    b.HasOne("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.BlockPolygon", "BlockPolygon")
+                    b.HasOne("AccidentMonitoring.Domain.Entities.Accident.AccidentEntity", "Accident")
                         .WithMany("Coordinates")
-                        .HasForeignKey("BlockPolygonId")
+                        .HasForeignKey("AccidentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.OwnsOne("AccidentMonitoring.Domain.Entities.MapStuff.Coordinate", "Coordinate", b1 =>
                         {
-                            b1.Property<Guid>("PolygonCoordinateId")
+                            b1.Property<Guid>("PolygonCoordinateGuid")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<float>("Latitude")
@@ -579,15 +545,15 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                                 .HasColumnType("real")
                                 .HasColumnName("Longitude");
 
-                            b1.HasKey("PolygonCoordinateId");
+                            b1.HasKey("PolygonCoordinateGuid");
 
                             b1.ToTable("PolygonCoordinates");
 
                             b1.WithOwner()
-                                .HasForeignKey("PolygonCoordinateId");
+                                .HasForeignKey("PolygonCoordinateGuid");
                         });
 
-                    b.Navigation("BlockPolygon");
+                    b.Navigation("Accident");
 
                     b.Navigation("Coordinate")
                         .IsRequired();
@@ -648,8 +614,7 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                 {
                     b.Navigation("AccidentInvolved");
 
-                    b.Navigation("BlockPolygon")
-                        .IsRequired();
+                    b.Navigation("Coordinates");
                 });
 
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.CitizenEntity", b =>
@@ -662,11 +627,6 @@ namespace AccidentMonitoring.Infrastructure.Migrations
             modelBuilder.Entity("AccidentMonitoring.Domain.Entities.Accident.VehicleEntity", b =>
                 {
                     b.Navigation("AccidentInvolved");
-                });
-
-            modelBuilder.Entity("AccidentMonitoring.Domain.Entities.MapStuff.Polygons.BlockPolygon", b =>
-                {
-                    b.Navigation("Coordinates");
                 });
 #pragma warning restore 612, 618
         }

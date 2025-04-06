@@ -8,13 +8,14 @@ namespace AccidentMonitoring.Infrastructure.Data.Configurations.MapStuff
     {
         public void Configure(EntityTypeBuilder<PolygonCoordinate> builder)
         {
-            builder.Property(v => v.Id)
+            builder.HasKey(v => v.Guid);
+            builder.Property(v => v.Guid)
                 .HasColumnName("Guid")
                 .ValueGeneratedOnAdd();
 
-            builder.HasOne(pc => pc.BlockPolygon)
+            builder.HasOne(pc => pc.Accident)
                 .WithMany(bp => bp.Coordinates)
-                .HasForeignKey(pc => pc.BlockPolygonId)
+                .HasForeignKey(pc => pc.AccidentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.OwnsOne(pc => pc.Coordinate, coordinateBuilder =>
@@ -28,7 +29,7 @@ namespace AccidentMonitoring.Infrastructure.Data.Configurations.MapStuff
                     .IsRequired();
             });
 
-            builder.Property(pc => pc.BlockPolygonId).IsRequired();
+            builder.Property(pc => pc.AccidentId).IsRequired();
         }
     }
 }

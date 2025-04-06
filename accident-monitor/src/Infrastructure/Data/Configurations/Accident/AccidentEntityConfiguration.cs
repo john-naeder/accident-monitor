@@ -8,7 +8,8 @@ public class AccidentEntityConfiguration : IEntityTypeConfiguration<AccidentEnti
 {
     public void Configure(EntityTypeBuilder<AccidentEntity> builder)
     {
-        builder.Property(v => v.Id)
+        builder.HasKey(a => a.Guid);
+        builder.Property(v => v.Guid)
             .HasColumnName("Guid")
             .ValueGeneratedOnAdd();
 
@@ -21,9 +22,5 @@ public class AccidentEntityConfiguration : IEntityTypeConfiguration<AccidentEnti
             .HasForeignKey(av => av.AccidentId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(a => a.BlockPolygon)
-            .WithOne(bp => bp.Accident)
-            .HasForeignKey<BlockPolygon>(bp => bp.AccidentId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

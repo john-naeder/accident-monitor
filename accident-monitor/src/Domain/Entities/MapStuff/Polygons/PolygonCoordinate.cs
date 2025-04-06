@@ -1,32 +1,32 @@
-﻿namespace AccidentMonitoring.Domain.Entities.MapStuff.Polygons
+﻿using AccidentMonitoring.Domain.Entities.Accident;
+
+namespace AccidentMonitoring.Domain.Entities.MapStuff.Polygons
 {
     public class PolygonCoordinate : BaseAuditableEntity, IEquatable<PolygonCoordinate>
     {
-        public PolygonCoordinate() {}
-        public Guid BlockPolygonId { get; set; }
-        public Coordinate Coordinate { get; set; } = new Coordinate();
-        public virtual BlockPolygon BlockPolygon { get; set; } = null!;
+        public PolygonCoordinate() { }
 
-        public PolygonCoordinate(Guid blockPolygonId, float longitude, float latitude)
+        public PolygonCoordinate(float longitude, float latitude)
         {
-            BlockPolygonId = blockPolygonId;
             Coordinate = new Coordinate(longitude, latitude);
         }
 
+        public Guid AccidentId { get; set; }
+        public virtual AccidentEntity Accident { get; set; } = null!;
+
+        public Coordinate Coordinate { get; set; } = new Coordinate();
+
         public bool Equals(PolygonCoordinate? other)
         {
-            return other is not null && Coordinate.Longitude 
-                == other.Coordinate.Longitude && Coordinate.Latitude 
-                == other.Coordinate.Latitude;
-        }
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Coordinate.Longitude, Coordinate.Latitude);
+            return other is not null
+                && Coordinate.Longitude == other.Coordinate.Longitude
+                && Coordinate.Latitude == other.Coordinate.Latitude;
         }
 
+        public override int GetHashCode()
+            => HashCode.Combine(Coordinate.Longitude, Coordinate.Latitude);
+
         public override bool Equals(object? obj)
-        {
-            return ((IEquatable<PolygonCoordinate>)this).Equals(obj as PolygonCoordinate);
-        }
+            => Equals(obj as PolygonCoordinate);
     }
 }
