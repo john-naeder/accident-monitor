@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace AccidentMonitoring.Infrastructure.Identity;
+namespace AccidentMonitor.Infrastructure.Identity;
 public class ApplicationUser : IdentityUser
 {
 }

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AccidentMonitoring.Application.ORService.Queries.HealthCheck;
+namespace AccidentMonitor.Application.ORService.Queries.HealthCheck;
 public class HealthCheckResponseDto
 {
     [JsonPropertyName("status")]

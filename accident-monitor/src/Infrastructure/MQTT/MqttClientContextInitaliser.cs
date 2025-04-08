@@ -1,11 +1,9 @@
-﻿using System;
-using AccidentMonitoring.Application.Common.Interfaces;
-using AccidentMonitoring.Application.ORService.Queries.GetDirections;
+﻿using AccidentMonitor.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace AccidentMonitoring.Infrastructure.MQTT;
+namespace AccidentMonitor.Infrastructure.MQTT;
 public static class InitializerExtensions
 {
     public static async Task InitializeMqttAsync(this WebApplication app)

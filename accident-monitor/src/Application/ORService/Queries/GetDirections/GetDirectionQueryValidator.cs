@@ -1,7 +1,7 @@
-﻿namespace AccidentMonitoring.Application.ORService.Queries.GetDirections;
-public class GetDirectionDefaultQueryValidator : AbstractValidator<GetDirectionDefaultQuery>
+﻿namespace AccidentMonitor.Application.ORService.Queries.GetDirections;
+public class GetDirectionQueryValidator : AbstractValidator<GetDirectionQuery>
 {
-    public GetDirectionDefaultQueryValidator()
+    public GetDirectionQueryValidator()
     {
         RuleFor(x => x.Profile)
             .NotEmpty().WithMessage("Origin is required.");

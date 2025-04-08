@@ -1,6 +1,6 @@
-﻿using AccidentMonitoring.Application.Common.Results;
+﻿using AccidentMonitor.Application.Common.Results;
 
-namespace AccidentMonitoring.Application.Common.Interfaces;
+namespace AccidentMonitor.Application.Common.Interfaces;
 
 public interface IMqttService : IExternalServices
 {

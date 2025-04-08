@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using AccidentMonitoring.Application.ORService;
+using AccidentMonitor.Application.ORService;
 
-namespace AccidentMonitoring.Application.ServicesCheck.ORService
+namespace AccidentMonitor.Application.ServicesCheck.ORService
 {
     public class GetStatusORSResponseDto
     {
@@ -12,7 +12,7 @@ namespace AccidentMonitoring.Application.ServicesCheck.ORService
         [JsonPropertyName("profiles")]
         public ProfileDto? Profiles { get; set; }
         [JsonPropertyName("services")]
-        public string[]? Services { get; set; } 
+        public string[]? Services { get; set; }
     }
 
     public class ProfileDto

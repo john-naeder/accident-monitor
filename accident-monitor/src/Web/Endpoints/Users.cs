@@ -1,6 +1,6 @@
-﻿using AccidentMonitoring.Infrastructure.Identity;
+﻿using AccidentMonitor.Infrastructure.Identity;
 
-namespace AccidentMonitoring.Web.Endpoints;
+namespace AccidentMonitor.Web.Endpoints;
 public class Users : EndpointGroupBase
 {
     public override void Map(WebApplication app)

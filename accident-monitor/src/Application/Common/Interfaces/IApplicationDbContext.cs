@@ -1,7 +1,7 @@
-﻿using AccidentMonitoring.Domain.Entities.Accident;
-using AccidentMonitoring.Domain.Entities.MapStuff.Polygons;
+﻿using AccidentMonitor.Domain.Entities.Accident;
+using AccidentMonitor.Domain.Entities.MapStuff.Polygons;
 
-namespace AccidentMonitoring.Application.Common.Interfaces;
+namespace AccidentMonitor.Application.Common.Interfaces;
 public interface IApplicationDbContext
 {
     DbSet<CitizenEntity> Citizens { get; }

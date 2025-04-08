@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using AccidentMonitoring.Application.Common.Interfaces;
+using AccidentMonitor.Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace AccidentMonitoring.Application.Common.Behaviours;
+namespace AccidentMonitor.Application.Common.Behaviours;
 public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly Stopwatch _timer;
@@ -43,7 +43,7 @@ public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
                 userName = await _identityService.GetUserNameAsync(userId);
             }
 
-            _logger.LogWarning("AccidentMonitoring Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
+            _logger.LogWarning("AccidentMonitor Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
                 requestName, elapsedMilliseconds, userId, userName, request);
         }
 

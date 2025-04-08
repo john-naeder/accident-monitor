@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Infrastructure.ORS;
+﻿namespace AccidentMonitor.Infrastructure.ORS;
 
 [Serializable]
 internal class UnknownException : Exception

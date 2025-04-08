@@ -2,8 +2,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace AccidentMonitoring.Application.ORService.Queries.GetDirections.Dto;
-public class GetDirectionDefaultRequestDto : IParsable<GetDirectionDefaultRequestDto>
+namespace AccidentMonitor.Application.ORService.Queries.GetDirections.Dtos;
+public class GetDirectionRequestDto : IParsable<GetDirectionRequestDto>
 {
     /// <summary>
     /// Starting coordinate of the route in "longitude, latitude" format.
@@ -17,12 +17,12 @@ public class GetDirectionDefaultRequestDto : IParsable<GetDirectionDefaultReques
     [JsonPropertyName("end")]
     public string DestinationCoordinate { get; set; } = string.Empty;
 
-    public static GetDirectionDefaultRequestDto Parse(string s, IFormatProvider? provider)
+    public static GetDirectionRequestDto Parse(string s, IFormatProvider? provider)
     {
         return TryParse(s, provider, out var result) ? result : throw new FormatException("Input string was not in a correct format.");
     }
 
-    public static bool TryParse(string? s, IFormatProvider? provider, [NotNullWhen(true)] out GetDirectionDefaultRequestDto? result)
+    public static bool TryParse(string? s, IFormatProvider? provider, [NotNullWhen(true)] out GetDirectionRequestDto? result)
     {
         result = null;
         if (string.IsNullOrWhiteSpace(s))
@@ -32,7 +32,7 @@ public class GetDirectionDefaultRequestDto : IParsable<GetDirectionDefaultReques
 
         try
         {
-            result = JsonSerializer.Deserialize<GetDirectionDefaultRequestDto>(s);
+            result = JsonSerializer.Deserialize<GetDirectionRequestDto>(s);
             return result != null;
         }
         catch (JsonException)

@@ -1,20 +1,17 @@
-﻿using MQTTnet;
-using MQTTnet.Protocol;
-using System.Security.Authentication;
-using AccidentMonitoring.Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
-using System.Security.Cryptography.X509Certificates;
-using AccidentMonitoring.Application.Common.Results;
-using MQTTnet.Adapter;
-using AccidentMonitoring.Application.ORService.MQTT.Request;
-using AccidentMonitoring.Application.ORService.Queries.GetDirections;
-using System.Net.Sockets;
-using MQTTnet.Formatter;
+﻿using System.Security.Authentication;
 using System.Text.Json;
-using AccidentMonitoring.Application.ORService.Queries.GetDirections.Dtos;
+using AccidentMonitor.Application.Common.Interfaces;
+using AccidentMonitor.Application.Common.Results;
+using AccidentMonitor.Application.ORService.Queries.GetDirections.Dtos;
+using AccidentMonitor.Infrastructure.MQTT.MQTTMessage.Request;
+using Microsoft.Extensions.Logging;
+using MQTTnet;
+using MQTTnet.Adapter;
+using MQTTnet.Formatter;
+using MQTTnet.Protocol;
 
 
-namespace AccidentMonitoring.Infrastructure.MQTT
+namespace AccidentMonitor.Infrastructure.MQTT
 {
     // TODO: Refactor: remove IORService from this to clean code and make it more testable
     public class MqttClientService : IMqttService, IAsyncDisposable, IDisposable
@@ -31,7 +28,7 @@ namespace AccidentMonitoring.Infrastructure.MQTT
         private const int ReconnectDelay = 5;
 
         public MqttClientService(
-            MqttConnectionConfiguration options, 
+            MqttConnectionConfiguration options,
             ILogger<MqttClientService> logger,
             IORService orService
             )
@@ -71,32 +68,37 @@ namespace AccidentMonitoring.Infrastructure.MQTT
         }
         public async Task<ServiceResult> ConnectAsync()
         {
-            var uri = $"tcp://{_config.Broker}:{_config.Port}/{_config.Protocol}";
+            var uri = $"{_config.Broker}:{_config.Port}/{_config.Protocol}";
             var builder = new MqttClientOptionsBuilder()
                 .WithClientId(_config.ClientID)
-                .WithTcpServer(_config.Broker, _config.Port)
+                //.WithTcpServer(_config.Broker, _config.Port)
                 .WithProtocolVersion((MqttProtocolVersion)_config.ProtocolVersion)
                 .WithTimeout(TimeSpan.FromSeconds(5))
                 .WithKeepAlivePeriod(TimeSpan.FromSeconds(60))
                 .WithCredentials(_config.Username, _config.Password);
 
+            builder = _config.UseWebSocket
+                ? builder.WithWebSocketServer(o => o.WithUri($"ws://{uri}"))
+                : builder.WithTcpServer(_config.Broker, _config.Port);
+
             if (_config.UseTls)
             {
-                if (string.IsNullOrWhiteSpace(_config.CertPath))
-                {
-                    _logger.LogError("Certificate path is not provided.");
-                    throw new ArgumentException("Certificate path must be provided", nameof(_config.CertPath));
-                }
+                //if (string.IsNullOrWhiteSpace(_config.CertPath))
+                //{
+                //    _logger.LogError("Certificate path is not provided.");
+                //    throw new ArgumentException("Certificate path must be provided", nameof(_config.CertPath));
+                //}
 
-                try { 
-                    var cert = X509CertificateLoader.LoadCertificateFromFile(_config.CertPath);
+                try
+                {
+                    //var cert = X509CertificateLoader.LoadCertificateFromFile(_config.CertPath);
 
                     builder = _config.TrustChain == null
                         ? builder.WithTlsOptions(o =>
                         {
                             o.WithCertificateValidationHandler(_ => true);
                             o.WithSslProtocols(SslProtocols.Tls12);
-                            o.WithClientCertificates(new[] { cert });
+                            //o.WithClientCertificates(new[] { cert });
                         })
                         : builder.WithTlsOptions(new MqttClientTlsOptionsBuilder()
                             .WithTrustChain(_config.TrustChain)
@@ -117,7 +119,7 @@ namespace AccidentMonitoring.Infrastructure.MQTT
                 {
                     _logger.LogInformation("Attempting to connect to MQTT broker at {Server}:{Port}",
                         _config.Broker, _config.Port);
-                      await _mqttClient.ConnectAsync(clientOptions, _cancellationTokenSource.Token);
+                    response = await _mqttClient.ConnectAsync(clientOptions, _cancellationTokenSource.Token);
                     _logger.LogInformation("Connected to MQTT broker successfully");
                 }
             }
@@ -186,7 +188,7 @@ namespace AccidentMonitoring.Infrastructure.MQTT
                 subscribeOptions = subscribeOptions.WithTopicFilter(topic, MqttQualityOfServiceLevel.AtLeastOnce);
             }
 
-            var builtSubscribeOptions = subscribeOptions.Build(); 
+            var builtSubscribeOptions = subscribeOptions.Build();
             try
             {
                 var response = await _mqttClient.SubscribeAsync(builtSubscribeOptions, CancellationToken.None);
@@ -299,10 +301,7 @@ namespace AccidentMonitoring.Infrastructure.MQTT
             //}
         }
 
-        public void Dispose()
-        {
-            DisposeAsync().AsTask().Wait();
-        }
+        public void Dispose() => DisposeAsync().AsTask().Wait();
 
 
         public async Task<TResponse> HealthCheck<TResponse>()
@@ -349,11 +348,11 @@ namespace AccidentMonitoring.Infrastructure.MQTT
                 _logger.LogInformation("Received routing request with RequestId: {RequestId}, Profile: {Profile}",
                             requestMessage.RequestId, requestMessage.Profile);
 
-                var result = await _orService.GetDefaultRoutingDirectionAsync<GetDirectionDefaultResponseDto>(
+                var result = await _orService.GetRoutingDirectionAsync<GetDirectionResponseDto>(
                     requestMessage.Profile, requestMessage.Request);
-                var response = DirectionMapper.Map(result);
+
                 string responseTopic = $"rsu/Response/Directions/{requestMessage.RequestId}";
-                var publishResult = await PublishAsync(responseTopic, response);
+                var publishResult = await PublishAsync(responseTopic, result);
                 _logger.LogInformation("Sent routing result to topic {ResponseTopic} with result: {Result}",
                             responseTopic, publishResult);
                 await Task.CompletedTask;

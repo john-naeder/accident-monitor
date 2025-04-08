@@ -1,10 +1,11 @@
-﻿using AccidentMonitoring.Application.Common.Interfaces;
-using AccidentMonitoring.Domain.Constants;
-using AccidentMonitoring.Infrastructure.Data;
-using AccidentMonitoring.Infrastructure.Data.Interceptors;
-using AccidentMonitoring.Infrastructure.Identity;
-using AccidentMonitoring.Infrastructure.MQTT;
-using AccidentMonitoring.Infrastructure.ORS;
+﻿using AccidentMonitor.Application.Common.Interfaces;
+using AccidentMonitor.Domain.Constants;
+using AccidentMonitor.Infrastructure.Data;
+using AccidentMonitor.Infrastructure.Data.Interceptors;
+using AccidentMonitor.Infrastructure.Identity;
+using AccidentMonitor.Infrastructure.MQTT;
+using AccidentMonitor.Infrastructure.ORS;
+using AccidentMonitor.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -13,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace AccidentMonitoring.Infrastructure;
+namespace AccidentMonitor.Infrastructure;
 public static class DependencyInjection
 {
     public static void AddInfrastructureServices(this IHostApplicationBuilder builder)
@@ -24,6 +25,7 @@ public static class DependencyInjection
 
         builder.Services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         builder.Services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
+        builder.Services.AddScoped<ISaveChangesInterceptor, AccidentEntityInterceptor>();
 
         builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
@@ -56,6 +58,11 @@ public static class DependencyInjection
         builder.Services.AddAuthorizationBuilder()
             .AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator));
 
+        // Repositories
+        builder.Services.AddTransient<IAccidentRepository, AccidentRepository>();
+        builder.Services.AddTransient<IBlockedPolygonCoordRepository, BlockedPolygonCoordinateRepository>();
+
+        // MQTT Service
         builder.Services.Configure<MqttConnectionConfiguration>
             (builder.Configuration.GetSection("MqttConnectionConfig"));
         builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<MqttConnectionConfiguration>>().Value);

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>AccidentMonitoring.Application</RootNamespace>
-    <AssemblyName>AccidentMonitoring.Application</AssemblyName>
+    <RootNamespace>AccidentMonitor.Application</RootNamespace>
+    <AssemblyName>AccidentMonitor.Application</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -26,10 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Accident\Commands\CreateAccidentReport\" />
     <Folder Include="Accident\Mappers\" />
-    <Folder Include="Accident\EventHandlers\" />
-    <Folder Include="Accident\Queries\" />
+    <Folder Include="BlockPolygon\Commands\" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
-﻿using AccidentMonitoring.Application.Common.Models;
+﻿using AccidentMonitor.Application.Common.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace AccidentMonitoring.Infrastructure.Identity;
+namespace AccidentMonitor.Infrastructure.Identity;
 public static class IdentityResultExtensions
 {
     public static Result ToApplicationResult(this IdentityResult result)

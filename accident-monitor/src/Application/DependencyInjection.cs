@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using AccidentMonitoring.Application.Common.Behaviours;
+using AccidentMonitor.Application.Common.Behaviours;
 using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Extensions.DependencyInjection;
