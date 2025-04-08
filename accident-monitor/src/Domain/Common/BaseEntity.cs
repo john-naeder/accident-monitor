@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AccidentMonitoring.Domain.Common;
+namespace AccidentMonitor.Domain.Common;
 public abstract class BaseEntity
 {
     public Guid Guid { get; set; } = Guid.NewGuid();

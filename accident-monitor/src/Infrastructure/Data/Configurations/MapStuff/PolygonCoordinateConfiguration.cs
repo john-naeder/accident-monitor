@@ -1,8 +1,8 @@
-﻿using AccidentMonitoring.Domain.Entities.MapStuff.Polygons;
+﻿using AccidentMonitor.Domain.Entities.MapStuff.Polygons;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AccidentMonitoring.Infrastructure.Data.Configurations.MapStuff
+namespace AccidentMonitor.Infrastructure.Data.Configurations.MapStuff
 {
     public class PolygonCoordinateConfiguration : IEntityTypeConfiguration<PolygonCoordinate>
     {
@@ -14,7 +14,7 @@ namespace AccidentMonitoring.Infrastructure.Data.Configurations.MapStuff
                 .ValueGeneratedOnAdd();
 
             builder.HasOne(pc => pc.Accident)
-                .WithMany(bp => bp.Coordinates)
+                .WithMany(bp => bp.BlockedPolygonCoordinates)
                 .HasForeignKey(pc => pc.AccidentId)
                 .OnDelete(DeleteBehavior.Cascade);
 

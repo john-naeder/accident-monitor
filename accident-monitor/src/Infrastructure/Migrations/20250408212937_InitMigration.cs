@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace AccidentMonitoring.Infrastructure.Migrations
+namespace AccidentMonitor.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class InitMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -116,11 +116,7 @@ namespace AccidentMonitoring.Infrastructure.Migrations
                     Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AccidentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Latitude = table.Column<float>(type: "real", nullable: false),
-                    Longitude = table.Column<float>(type: "real", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Longitude = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {

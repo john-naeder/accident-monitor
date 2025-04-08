@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Domain.Constants;
+﻿namespace AccidentMonitor.Domain.Constants;
 
 public abstract class Roles
 {

@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Domain.Entities.Accident
+﻿namespace AccidentMonitor.Domain.Entities.Accident
 {
     public class VehicleEntity(string registrationCertificateNumber, string licensePlate, string engineNumber,
                          string chassisNumber, string type, string brand, string model, string vehicleOwnerName,

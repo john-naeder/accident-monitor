@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
-using AccidentMonitoring.Application.Common.Interfaces;
-using AccidentMonitoring.Domain.Entities.Accident;
-using AccidentMonitoring.Domain.Entities.MapStuff.Polygons;
-using AccidentMonitoring.Infrastructure.Identity;
+using AccidentMonitor.Application.Common.Interfaces;
+using AccidentMonitor.Domain.Entities.Accident;
+using AccidentMonitor.Domain.Entities.MapStuff.Polygons;
+using AccidentMonitor.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AccidentMonitoring.Infrastructure.Data;
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
+namespace AccidentMonitor.Infrastructure.Data;
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
 {
     public DbSet<CitizenEntity> Citizens => Set<CitizenEntity>();

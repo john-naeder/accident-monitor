@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>AccidentMonitoring.Domain</RootNamespace>
-    <AssemblyName>AccidentMonitoring.Domain</AssemblyName>
+    <RootNamespace>AccidentMonitor.Domain</RootNamespace>
+    <AssemblyName>AccidentMonitor.Domain</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

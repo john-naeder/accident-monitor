@@ -1,21 +1,21 @@
-﻿using AccidentMonitoring.Application.Helpers;
-using AccidentMonitoring.Domain.Entities.Accident;
+﻿using AccidentMonitor.Application.Helpers;
+using AccidentMonitor.Domain.Entities.Accident;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace AccidentMonitoring.Infrastructure.Data.Interceptors;
+namespace AccidentMonitor.Infrastructure.Data.Interceptors;
 public class AccidentEntityInterceptor : SaveChangesInterceptor
 {
     public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
-        DbContextEventData eventData, 
+        DbContextEventData eventData,
         InterceptionResult<int> result,
         CancellationToken cancellationToken)
     {
-        var context = eventData.Context; 
+        var context = eventData.Context;
         if (context == null) return await base.SavingChangesAsync(eventData, result, cancellationToken);
         var newAccidents = context.ChangeTracker
             .Entries<AccidentEntity>()
-            .Where(e  => e.State == EntityState.Added)
+            .Where(e => e.State == EntityState.Added)
             .Select(e => e.Entity)
             .ToList();
 
@@ -23,7 +23,7 @@ public class AccidentEntityInterceptor : SaveChangesInterceptor
         {
             if (accident.IsBlockingWay)
             {
-                accident.Coordinates = BlockPolygonGenerateHelper
+                accident.BlockedPolygonCoordinates = BlockPolygonGenerateHelper
                     .GenerateSquareCoordinates(accident);
             }
         }

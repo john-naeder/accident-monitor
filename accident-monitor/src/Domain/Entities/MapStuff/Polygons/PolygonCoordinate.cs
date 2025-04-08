@@ -1,20 +1,22 @@
-﻿using AccidentMonitoring.Domain.Entities.Accident;
+﻿using System.Text.Json.Serialization;
+using AccidentMonitor.Domain.Entities.Accident;
 
-namespace AccidentMonitoring.Domain.Entities.MapStuff.Polygons
+namespace AccidentMonitor.Domain.Entities.MapStuff.Polygons
 {
-    public class PolygonCoordinate : BaseAuditableEntity, IEquatable<PolygonCoordinate>
+    public class PolygonCoordinate : BaseEntity, IEquatable<PolygonCoordinate>
     {
         public PolygonCoordinate() { }
 
         public PolygonCoordinate(float longitude, float latitude)
         {
-            Coordinate = new Coordinate(longitude, latitude);
+            Coordinate = new CoordinateEntity(longitude, latitude);
         }
 
         public Guid AccidentId { get; set; }
+        [JsonIgnore]
         public virtual AccidentEntity Accident { get; set; } = null!;
 
-        public Coordinate Coordinate { get; set; } = new Coordinate();
+        public CoordinateEntity Coordinate { get; set; } = new CoordinateEntity();
 
         public bool Equals(PolygonCoordinate? other)
         {

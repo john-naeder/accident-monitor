@@ -1,8 +1,8 @@
-﻿using AccidentMonitoring.Domain.Entities.Accident;
+﻿using AccidentMonitor.Domain.Entities.Accident;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AccidentMonitoring.Infrastructure.Data.Configurations.Accident;
+namespace AccidentMonitor.Infrastructure.Data.Configurations.Accident;
 public class AccidentInvolvedConfiguration : IEntityTypeConfiguration<AccidentInvolved>
 {
     public void Configure(EntityTypeBuilder<AccidentInvolved> builder)

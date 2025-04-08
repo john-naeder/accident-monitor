@@ -1,16 +1,16 @@
-﻿namespace AccidentMonitoring.Domain.Entities.MapStuff;
-public class Coordinate
+﻿namespace AccidentMonitor.Domain.Entities.MapStuff;
+public class CoordinateEntity
 {
-    public Coordinate()
+    public CoordinateEntity()
     {
     }
 
-    public Coordinate(Coordinate other) 
+    public CoordinateEntity(CoordinateEntity other)
     {
         Latitude = other.Latitude;
         Longitude = other.Longitude;
     }
-    public Coordinate(float longitude, float latitude)
+    public CoordinateEntity(float longitude, float latitude)
     {
         Longitude = longitude;
         Latitude = latitude;

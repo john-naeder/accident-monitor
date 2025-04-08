@@ -1,8 +1,8 @@
-﻿using AccidentMonitoring.Domain.Entities.Accident;
+﻿using AccidentMonitor.Domain.Entities.Accident;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AccidentMonitoring.Infrastructure.Data.Configurations.Accident;
+namespace AccidentMonitor.Infrastructure.Data.Configurations.Accident;
 public class VehicleEntityConfiguration : IEntityTypeConfiguration<VehicleEntity>
 {
     public void Configure(EntityTypeBuilder<VehicleEntity> builder)
@@ -22,6 +22,6 @@ public class VehicleEntityConfiguration : IEntityTypeConfiguration<VehicleEntity
         builder.Property(a => a.LicensePlate).IsRequired();
         builder.Property(a => a.EngineNumber).IsRequired();
         builder.Property(a => a.ChassisNumber).IsRequired();
-        builder.Property(a => a.Brand).IsRequired();   
+        builder.Property(a => a.Brand).IsRequired();
     }
 }

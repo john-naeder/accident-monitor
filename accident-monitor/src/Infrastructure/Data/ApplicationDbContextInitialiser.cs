@@ -1,14 +1,14 @@
-﻿using AccidentMonitoring.Domain.Constants;
-using AccidentMonitoring.Domain.Entities.Accident;
-using AccidentMonitoring.Domain.Enums;
-using AccidentMonitoring.Infrastructure.Identity;
+﻿using AccidentMonitor.Domain.Constants;
+using AccidentMonitor.Domain.Entities.Accident;
+using AccidentMonitor.Domain.Enums;
+using AccidentMonitor.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace AccidentMonitoring.Infrastructure.Data;
+namespace AccidentMonitor.Infrastructure.Data;
 public static class InitializerExtensions
 {
     public static async Task InitializeDatabaseAsync(this WebApplication app)
@@ -19,7 +19,7 @@ public static class InitializerExtensions
 
         await initializer.InitializeAsync();
 
-        await initializer.SeedAsync();
+        //await initializer.SeedAsync();
     }
 }
 

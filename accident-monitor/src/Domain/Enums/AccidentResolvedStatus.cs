@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Domain.Enums;
+﻿namespace AccidentMonitor.Domain.Enums;
 public enum AccidentResolvedStatus
 {
     Unresolved = 0,

@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Domain.Entities.Accident;
+﻿namespace AccidentMonitor.Domain.Entities.Accident;
 public class CitizenEntity : BaseAuditableEntity
 {
     public CitizenEntity(
@@ -16,14 +16,14 @@ public class CitizenEntity : BaseAuditableEntity
         VerifiedPhoneNumber = verifiedPhoneNumber;
     }
 
-    public string CitizenIdentityNumber { get; set; }  
+    public string CitizenIdentityNumber { get; set; }
     public string FullName { get; set; } = null!;
-    public DateOnly DateOfBirth { get; set; } 
-    public bool IsMale { get; set; } 
-    public string Nationality { get; set; }  
+    public DateOnly DateOfBirth { get; set; }
+    public bool IsMale { get; set; }
+    public string Nationality { get; set; }
     public string PlaceOfOrigin { get; set; }
     public string PlaceOfResidence { get; set; }
-    public string VerifiedPhoneNumber { get; set; } 
+    public string VerifiedPhoneNumber { get; set; }
     public virtual ICollection<AccidentInvolved> AccidentsInvolved { get; set; } = [];
     public virtual ICollection<VehicleEntity> Vehicles { get; set; } = [];
 }

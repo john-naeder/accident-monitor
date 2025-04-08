@@ -1,9 +1,13 @@
-﻿using AccidentMonitoring.Domain.Entities.MapStuff.Polygons;
+﻿using AccidentMonitor.Domain.Entities.MapStuff.Polygons;
 
-namespace AccidentMonitoring.Domain.Entities.Accident
+namespace AccidentMonitor.Domain.Entities.Accident
 {
     public class AccidentEntity : BaseAuditableEntity
     {
+        public AccidentEntity()
+        {
+
+        }
         public AccidentEntity(
             DateTime timestamp,
             float longitude,
@@ -29,6 +33,6 @@ namespace AccidentMonitoring.Domain.Entities.Accident
 
         public virtual ICollection<AccidentInvolved> AccidentInvolved { get; set; } = [];
 
-        public virtual ICollection<PolygonCoordinate> Coordinates { get; set; } = [];
+        public virtual ICollection<PolygonCoordinate> BlockedPolygonCoordinates { get; set; } = [];
     }
 }
