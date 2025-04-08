@@ -2,7 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace AccidentMonitoring.Web.Pages;
+namespace AccidentMonitor.Web.Pages;
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 public class ErrorModel : PageModel
 {
@@ -16,6 +16,17 @@ public class ErrorModel : PageModel
     public string? RequestId { get; set; }
 
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
+    public override bool Equals(object? obj)
+    {
+        return obj is ErrorModel model &&
+               EqualityComparer<ILogger<ErrorModel>>.Default.Equals(_logger, model._logger);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_logger);
+    }
 
     public void OnGet()
     {

@@ -8,8 +8,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsAspireHost>true</IsAspireHost>
-    <RootNamespace>AccidentMonitoring.AppHost</RootNamespace>
-    <AssemblyName>AccidentMonitoring.AppHost</AssemblyName>
+    <RootNamespace>AccidentMonitor.AppHost</RootNamespace>
+    <AssemblyName>AccidentMonitor.AppHost</AssemblyName>
   </PropertyGroup>
 
 

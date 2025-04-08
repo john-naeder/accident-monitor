@@ -1,9 +1,9 @@
-﻿using AccidentMonitoring.Application.Common.Exceptions;
+﻿using AccidentMonitor.Application.Common.Exceptions;
 using FluentAssertions;
 using FluentValidation.Results;
 using NUnit.Framework;
 
-namespace AccidentMonitoring.Application.UnitTests.Common.Exceptions;
+namespace AccidentMonitor.Application.UnitTests.Common.Exceptions;
 public class ValidationExceptionTests
 {
     [Test]

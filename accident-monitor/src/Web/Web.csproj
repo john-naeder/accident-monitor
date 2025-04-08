@@ -4,8 +4,8 @@
     <SpaRoot>ClientApp\</SpaRoot>
     <SpaProxyServerUrl>https://localhost:44447</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-    <RootNamespace>AccidentMonitoring.Web</RootNamespace>
-    <AssemblyName>AccidentMonitoring.Web</AssemblyName>
+    <RootNamespace>AccidentMonitor.Web</RootNamespace>
+    <AssemblyName>AccidentMonitor.Web</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

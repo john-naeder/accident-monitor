@@ -2,7 +2,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var sql = builder.AddSqlServer("sql");
 
-var database = sql.AddDatabase("AccidentMonitoringDb");
+var database = sql.AddDatabase("AccidentMonitorDb");
 
 builder.AddProject<Projects.Web>("web")
     .WithReference(database)

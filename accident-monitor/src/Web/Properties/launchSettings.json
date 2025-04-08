@@ -8,9 +8,9 @@
     }
   },
   "profiles": {
-    "AccidentMonitoring.Web": {
+    "AccidentMonitor.Web": {
       "commandName": "Project",
-      "launchBrowser": true,
+      //"launchBrowser": true,
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:443;http://localhost:80",
       "environmentVariables": {

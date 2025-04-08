@@ -1,7 +1,7 @@
-﻿using AccidentMonitoring.Infrastructure;
-using AccidentMonitoring.Infrastructure.Data;
-using AccidentMonitoring.Infrastructure.MQTT;
-using AccidentMonitoring.Web;
+﻿using AccidentMonitor.Infrastructure;
+using AccidentMonitor.Infrastructure.Data;
+using AccidentMonitor.Infrastructure.MQTT;
+using AccidentMonitor.Web;
 
 public class Program
 {

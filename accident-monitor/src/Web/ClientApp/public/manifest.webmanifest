@@ -1,6 +1,6 @@
 {
-  "short_name": "AccidentMonitoring.Web",
-  "name": "AccidentMonitoring.Web",
+  "short_name": "AccidentMonitor.Web",
+  "name": "AccidentMonitor.Web",
   "icons": [
     {
       "src": "favicon.ico",

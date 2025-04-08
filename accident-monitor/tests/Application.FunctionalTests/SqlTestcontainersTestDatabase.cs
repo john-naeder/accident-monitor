@@ -1,15 +1,15 @@
 ﻿using System.Data.Common;
-using AccidentMonitoring.Infrastructure.Data;
+using AccidentMonitor.Infrastructure.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Respawn;
 using Testcontainers.MsSql;
 
-namespace AccidentMonitoring.Application.FunctionalTests;
+namespace AccidentMonitor.Application.FunctionalTests;
 public class SqlTestcontainersTestDatabase : ITestDatabase
 {
-    private const string DefaultDatabase = "AccidentMonitoringTestDb";
+    private const string DefaultDatabase = "AccidentMonitorTestDb";
     private readonly MsSqlContainer _container;
     private DbConnection _connection = null!;
     private string _connectionString = null!;

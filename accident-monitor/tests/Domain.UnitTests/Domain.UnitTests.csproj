@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>AccidentMonitoring.Domain.UnitTests</RootNamespace>
-    <AssemblyName>AccidentMonitoring.Domain.UnitTests</AssemblyName>
+    <RootNamespace>AccidentMonitor.Domain.UnitTests</RootNamespace>
+    <AssemblyName>AccidentMonitor.Domain.UnitTests</AssemblyName>
     <IsPublishable>false</IsPublishable>
   </PropertyGroup>
 

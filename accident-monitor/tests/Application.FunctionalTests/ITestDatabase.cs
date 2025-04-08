@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace AccidentMonitoring.Application.FunctionalTests;
+namespace AccidentMonitor.Application.FunctionalTests;
 public interface ITestDatabase
 {
     Task InitializeAsync();

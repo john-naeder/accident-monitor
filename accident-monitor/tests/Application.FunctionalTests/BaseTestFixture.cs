@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Application.FunctionalTests;
+﻿namespace AccidentMonitor.Application.FunctionalTests;
 
 using static Testing;
 

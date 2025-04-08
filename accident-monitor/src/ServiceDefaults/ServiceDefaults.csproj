@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsAspireSharedProject>true</IsAspireSharedProject>
-    <RootNamespace>AccidentMonitoring.ServiceDefaults</RootNamespace>
-    <AssemblyName>AccidentMonitoring.ServiceDefaults</AssemblyName>
+    <RootNamespace>AccidentMonitor.ServiceDefaults</RootNamespace>
+    <AssemblyName>AccidentMonitor.ServiceDefaults</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
