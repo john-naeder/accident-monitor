@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Application.Common.Interfaces;
+﻿namespace AccidentMonitor.Application.Common.Interfaces;
 
 public interface IUser
 {

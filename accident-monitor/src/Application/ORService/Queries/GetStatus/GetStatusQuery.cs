@@ -1,6 +1,6 @@
-﻿using AccidentMonitoring.Application.Common.Interfaces;
-using AccidentMonitoring.Application.ServicesCheck.ORService;
-namespace AccidentMonitoring.Application.ORService.Queries.GetStatus;
+﻿using AccidentMonitor.Application.Common.Interfaces;
+using AccidentMonitor.Application.ServicesCheck.ORService;
+namespace AccidentMonitor.Application.ORService.Queries.GetStatus;
 
 public record GetStatusQuery : IRequest<GetStatusORSResponseDto>;
 public class GetStatusQueryHandler(IORService orServices) : IRequestHandler<GetStatusQuery, GetStatusORSResponseDto>

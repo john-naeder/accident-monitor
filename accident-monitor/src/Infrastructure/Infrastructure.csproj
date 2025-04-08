@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>AccidentMonitoring.Infrastructure</RootNamespace>
-    <AssemblyName>AccidentMonitoring.Infrastructure</AssemblyName>
+    <RootNamespace>AccidentMonitor.Infrastructure</RootNamespace>
+    <AssemblyName>AccidentMonitor.Infrastructure</AssemblyName>
     <NuGetAudit>false</NuGetAudit>
 
   </PropertyGroup>

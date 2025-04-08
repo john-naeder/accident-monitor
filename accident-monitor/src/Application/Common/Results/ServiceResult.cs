@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Application.Common.Results;
+﻿namespace AccidentMonitor.Application.Common.Results;
 
 public class ServiceResult(int isSucces, string reason)
 {

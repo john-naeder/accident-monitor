@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 
-using AccidentMonitoring.Application.Common.Interfaces;
+using AccidentMonitor.Application.Common.Interfaces;
 
-namespace AccidentMonitoring.Web.Services;
+namespace AccidentMonitor.Web.Services;
 public class CurrentUser : IUser
 {
     private readonly IHttpContextAccessor _httpContextAccessor;

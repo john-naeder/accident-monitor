@@ -1,9 +1,10 @@
 ﻿# Build stage
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS base
 WORKDIR /accident-monitor-app
 EXPOSE 80
 EXPOSE 443
 
+FROM mcr.microsoft.com/dotnet/sdk:9.0 as build
 COPY ["./*.props", "./"]
 COPY ["./*.sln", "./"]
 COPY ["./src/Domain/Domain.csproj", "./src/Domain/"]
@@ -19,15 +20,18 @@ COPY ["./tests/Domain.UnitTests/Domain.UnitTests.csproj", "./tests/Domain.UnitTe
 COPY ["./tests/Infrastructure.IntegrationTests/Infrastructure.IntegrationTests.csproj", "./tests/Infrastructure.IntegrationTests/"]
 
 RUN dotnet restore "AccidentMonitoring.sln"
-
 COPY [".", "./"]
 
 WORKDIR "/accident-monitor-app/src/Web"
+RUN dotnet build "Web.csproj" -c Release -o /accident-monitor-app/publish
+
+FROM build AS publish
 RUN dotnet publish "Web.csproj" -c Release -o /accident-monitor-app/publish
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+
+FROM base AS final
 WORKDIR /app
 
-COPY --from=build /accident-monitor-app/publish .
+COPY --from=publish /accident-monitor-app/publish .
 
 # Set entry point
 ENTRYPOINT ["dotnet", "AccidentMonitoring.Web.dll"]

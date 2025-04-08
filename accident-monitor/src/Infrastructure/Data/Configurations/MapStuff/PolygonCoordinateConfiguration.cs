@@ -1,33 +1,35 @@
-﻿using AccidentMonitoring.Domain.Entities.MapStuff.Polygons;
+﻿using AccidentMonitor.Domain.Entities.MapStuff.Polygons;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AccidentMonitoring.Infrastructure.Data.Configurations.MapStuff
+namespace AccidentMonitor.Infrastructure.Data.Configurations.MapStuff
 {
     public class PolygonCoordinateConfiguration : IEntityTypeConfiguration<PolygonCoordinate>
     {
         public void Configure(EntityTypeBuilder<PolygonCoordinate> builder)
         {
-            builder.Property(v => v.Id)
+            builder.HasKey(v => v.Guid);
+            builder.Property(v => v.Guid)
+                .HasColumnName("Guid")
                 .ValueGeneratedOnAdd();
 
-            builder.HasOne(pc => pc.BlockPolygon)
-                .WithMany(bp => bp.Coordinates)
-                .HasForeignKey(pc => pc.BlockPolygonId)
+            builder.HasOne(pc => pc.Accident)
+                .WithMany(bp => bp.BlockedPolygonCoordinates)
+                .HasForeignKey(pc => pc.AccidentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.OwnsOne(pc => pc.Coordinate, coordBuilder =>
+            builder.OwnsOne(pc => pc.Coordinate, coordinateBuilder =>
             {
-                coordBuilder.Property(c => c.Longitude)
+                coordinateBuilder.Property(c => c.Longitude)
                     .HasColumnName("Longitude")
                     .IsRequired();
 
-                coordBuilder.Property(c => c.Latitude)
+                coordinateBuilder.Property(c => c.Latitude)
                     .HasColumnName("Latitude")
                     .IsRequired();
             });
 
-            builder.Property(pc => pc.BlockPolygonId).IsRequired();
+            builder.Property(pc => pc.AccidentId).IsRequired();
         }
     }
 }

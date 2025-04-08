@@ -1,8 +1,8 @@
-﻿using AccidentMonitoring.Application.Common.Interfaces;
+﻿using AccidentMonitor.Application.Common.Interfaces;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
 
-namespace AccidentMonitoring.Application.Common.Behaviours;
+namespace AccidentMonitor.Application.Common.Behaviours;
 public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where TRequest : notnull
 {
     private readonly ILogger _logger;
@@ -27,7 +27,7 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where T
             userName = await _identityService.GetUserNameAsync(userId);
         }
 
-        _logger.LogInformation("AccidentMonitoring Request: {Name} {@UserId} {@UserName} {@Request}",
+        _logger.LogInformation("AccidentMonitor Request: {Name} {@UserId} {@UserName} {@Request}",
             requestName, userId, userName, request);
     }
 }

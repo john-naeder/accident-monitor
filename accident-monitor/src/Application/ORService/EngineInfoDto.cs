@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AccidentMonitoring.Application.ORService;
+namespace AccidentMonitor.Application.ORService;
 
 public class EngineInfoDto
 {

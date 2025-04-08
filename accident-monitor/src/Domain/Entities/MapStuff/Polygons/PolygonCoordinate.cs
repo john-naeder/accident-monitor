@@ -1,32 +1,34 @@
-﻿namespace AccidentMonitoring.Domain.Entities.MapStuff.Polygons
-{
-    public class PolygonCoordinate : BaseAuditableEntity, IEquatable<PolygonCoordinate>
-    {
-        public int BlockPolygonId { get; set; }
-        public Coordinate Coordinate { get; set; } = new Coordinate();
-        public virtual BlockPolygon BlockPolygon { get; set; } = null!;
+﻿using System.Text.Json.Serialization;
+using AccidentMonitor.Domain.Entities.Accident;
 
+namespace AccidentMonitor.Domain.Entities.MapStuff.Polygons
+{
+    public class PolygonCoordinate : BaseEntity, IEquatable<PolygonCoordinate>
+    {
         public PolygonCoordinate() { }
 
-        public PolygonCoordinate(int blockPolygonId, float longitude, float latitude)
+        public PolygonCoordinate(float longitude, float latitude)
         {
-            BlockPolygonId = blockPolygonId;
-            Coordinate = new Coordinate(longitude, latitude);
-        }
-        public bool Equals(PolygonCoordinate? other)
-        {
-            return other is not null && Coordinate.Longitude 
-                == other.Coordinate.Longitude && Coordinate.Latitude 
-                == other.Coordinate.Latitude;
-        }
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Coordinate.Longitude, Coordinate.Latitude);
+            Coordinate = new CoordinateEntity(longitude, latitude);
         }
 
-        public override bool Equals(object? obj)
+        public Guid AccidentId { get; set; }
+        [JsonIgnore]
+        public virtual AccidentEntity Accident { get; set; } = null!;
+
+        public CoordinateEntity Coordinate { get; set; } = new CoordinateEntity();
+
+        public bool Equals(PolygonCoordinate? other)
         {
-            return ((IEquatable<PolygonCoordinate>)this).Equals(obj as PolygonCoordinate);
+            return other is not null
+                && Coordinate.Longitude == other.Coordinate.Longitude
+                && Coordinate.Latitude == other.Coordinate.Latitude;
         }
+
+        public override int GetHashCode()
+            => HashCode.Combine(Coordinate.Longitude, Coordinate.Latitude);
+
+        public override bool Equals(object? obj)
+            => Equals(obj as PolygonCoordinate);
     }
 }

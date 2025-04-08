@@ -1,6 +1,6 @@
-﻿using AccidentMonitoring.Application.Common.Models;
+﻿using AccidentMonitor.Application.Common.Models;
 
-namespace AccidentMonitoring.Application.Common.Interfaces;
+namespace AccidentMonitor.Application.Common.Interfaces;
 public interface IIdentityService
 {
     Task<string?> GetUserNameAsync(string userId);

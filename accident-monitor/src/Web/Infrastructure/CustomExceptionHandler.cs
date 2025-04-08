@@ -1,8 +1,8 @@
-﻿using AccidentMonitoring.Application.Common.Exceptions;
+﻿using AccidentMonitor.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AccidentMonitoring.Web.Infrastructure;
+namespace AccidentMonitor.Web.Infrastructure;
 public class CustomExceptionHandler : IExceptionHandler
 {
     private readonly Dictionary<Type, Func<HttpContext, Exception, Task>> _exceptionHandlers;
@@ -41,7 +41,8 @@ public class CustomExceptionHandler : IExceptionHandler
         {
             Status = StatusCodes.Status500InternalServerError,
             Title = "Unknown exception occur.",
-            Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
+            Detail = exception.Message
         });
     }
 
@@ -52,7 +53,8 @@ public class CustomExceptionHandler : IExceptionHandler
         {
             Status = StatusCodes.Status500InternalServerError,
             Title = "Internal Server Error",
-            Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
+            Detail = exception.Message
         });
     }
 
@@ -63,7 +65,8 @@ public class CustomExceptionHandler : IExceptionHandler
         {
             Status = StatusCodes.Status400BadRequest,
             Title = "Bad Request",
-            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1", 
+            Detail = exception.Message
         });
     }
 
@@ -76,7 +79,9 @@ public class CustomExceptionHandler : IExceptionHandler
         await httpContext.Response.WriteAsJsonAsync(new ValidationProblemDetails(exception.Errors)
         {
             Status = StatusCodes.Status400BadRequest,
-            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+            Title = "One or more validation failures have occurred.",
+            Detail = exception.Message
         });
     }
 
@@ -117,15 +122,16 @@ public class CustomExceptionHandler : IExceptionHandler
             Title = "Forbidden",
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.3"
         });
-    }   
+    }
     private async Task HandleServiceUnavailableException(HttpContext httpContext, Exception ex)
     {
         httpContext.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
         await httpContext.Response.WriteAsJsonAsync(new ProblemDetails
         {
             Status = StatusCodes.Status503ServiceUnavailable,
-            Title = "Service Unavailable. " + ex.Message,
-            Type = "https://tools.ietf.org/html/rfc7231#section-6.6.4"
+            Title = "Service Unavailable. ",
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.6.4",
+            Detail = ex.Message
         });
     }
 }

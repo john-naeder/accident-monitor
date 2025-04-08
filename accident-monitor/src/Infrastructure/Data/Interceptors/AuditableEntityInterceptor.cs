@@ -1,10 +1,10 @@
-﻿using AccidentMonitoring.Application.Common.Interfaces;
-using AccidentMonitoring.Domain.Common;
+﻿using AccidentMonitor.Application.Common.Interfaces;
+using AccidentMonitor.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace AccidentMonitoring.Infrastructure.Data.Interceptors;
+namespace AccidentMonitor.Infrastructure.Data.Interceptors;
 public class AuditableEntityInterceptor : SaveChangesInterceptor
 {
     private readonly IUser _user;

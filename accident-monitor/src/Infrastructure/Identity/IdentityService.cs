@@ -1,10 +1,9 @@
-using AccidentMonitoring.Application.Common.Interfaces;
-using AccidentMonitoring.Application.Common.Models;
+using AccidentMonitor.Application.Common.Interfaces;
+using AccidentMonitor.Application.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
-namespace AccidentMonitoring.Infrastructure.Identity;
+namespace AccidentMonitor.Infrastructure.Identity;
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;

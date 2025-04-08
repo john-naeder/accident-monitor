@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Web.Infrastructure;
+﻿namespace AccidentMonitor.Web.Infrastructure;
 
 public abstract class EndpointGroupBase
 {

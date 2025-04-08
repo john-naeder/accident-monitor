@@ -1,5 +1,5 @@
-﻿namespace AccidentMonitoring.Domain.Entities.Accident;
+﻿namespace AccidentMonitor.Domain.Entities.Accident;
 public class AccidentDetails : BaseAuditableEntity
 {
-    
+
 }

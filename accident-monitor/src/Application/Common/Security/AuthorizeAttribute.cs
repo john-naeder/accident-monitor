@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Application.Common.Security;
+﻿namespace AccidentMonitor.Application.Common.Security;
 
 /// <summary>
 /// Specifies the class this attribute is applied to requires authorization.

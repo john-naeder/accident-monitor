@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using MQTTnet;
-
-namespace AccidentMonitoring.Infrastructure.MQTT;
+﻿namespace AccidentMonitor.Infrastructure.MQTT;
 public class RsuRequestHandler
 {
 

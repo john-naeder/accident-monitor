@@ -1,12 +1,13 @@
-﻿using AccidentMonitoring.Application.Common.Interfaces;
-using AccidentMonitoring.Infrastructure.Data;
-using AccidentMonitoring.Web.Services;
+﻿using System.Text.Json.Serialization;
+using AccidentMonitor.Application.Common.Interfaces;
+using AccidentMonitor.Application.Converter;
+using AccidentMonitor.Web.Services;
 using Azure.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 
-namespace AccidentMonitoring.Web;
+namespace AccidentMonitor.Web;
 public static class DependencyInjection
 {
     public static void AddWebServices(this IHostApplicationBuilder builder)
@@ -15,9 +16,14 @@ public static class DependencyInjection
         builder.Services.AddScoped<IUser, CurrentUser>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+        builder.Services.AddRazorPages();
+        builder.Services.ConfigureHttpJsonOptions(options =>
+        {
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            options.SerializerOptions.Converters.Add(new CoordinateJsonConverter());
+        });
 
-
-        // Customise default API behaviour
+        // Customize default API behavior
         builder.Services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
 
@@ -25,7 +31,7 @@ public static class DependencyInjection
 
         builder.Services.AddOpenApiDocument((configure, sp) =>
         {
-            configure.Title = "AccidentMonitoring API";
+            configure.Title = "AccidentMonitor API";
 
             // Add JWT
             configure.AddSecurity("JWT", [], new OpenApiSecurityScheme

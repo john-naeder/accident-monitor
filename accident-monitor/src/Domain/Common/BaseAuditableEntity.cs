@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Domain.Common;
+﻿namespace AccidentMonitor.Domain.Common;
 
 public abstract class BaseAuditableEntity : BaseEntity
 {

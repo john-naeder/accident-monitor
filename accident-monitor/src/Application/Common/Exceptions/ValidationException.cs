@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 
-namespace AccidentMonitoring.Application.Common.Exceptions;
+namespace AccidentMonitor.Application.Common.Exceptions;
 public class ValidationException : Exception
 {
     public ValidationException()

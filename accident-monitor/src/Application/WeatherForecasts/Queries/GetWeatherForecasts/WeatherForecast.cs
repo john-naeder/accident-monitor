@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Application.WeatherForecasts.Queries.GetWeatherForecasts;
+﻿namespace AccidentMonitor.Application.WeatherForecasts.Queries.GetWeatherForecasts;
 
 public class WeatherForecast
 {

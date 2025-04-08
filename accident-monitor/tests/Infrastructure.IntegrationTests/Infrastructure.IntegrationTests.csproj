@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>AccidentMonitoring.Infrastructure.IntegrationTests</RootNamespace>
-    <AssemblyName>AccidentMonitoring.Infrastructure.IntegrationTests</AssemblyName>
+    <RootNamespace>AccidentMonitor.Infrastructure.IntegrationTests</RootNamespace>
+    <AssemblyName>AccidentMonitor.Infrastructure.IntegrationTests</AssemblyName>
     <IsPublishable>false</IsPublishable>
   </PropertyGroup>
 

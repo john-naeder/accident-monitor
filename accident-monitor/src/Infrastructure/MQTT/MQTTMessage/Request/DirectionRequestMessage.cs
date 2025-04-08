@@ -1,13 +1,15 @@
 ﻿using System.Text.Json.Serialization;
-using AccidentMonitoring.Application.ORService.Queries.GetDirections;
+using AccidentMonitor.Application.ORService.Queries.GetDirections.Dtos;
 
-namespace AccidentMonitoring.Application.ORService.MQTT.Request;
-public class DirectionRequestMessage
+namespace AccidentMonitor.Infrastructure.MQTT.MQTTMessage.Request
 {
-    [JsonPropertyName("profile")]
-    public string Profile { get; set; } = "driving-car";
-    [JsonPropertyName("request-id")]
-    public string RequestId { get; set; } = string.Empty;
-    [JsonPropertyName("request")]
-    public GetDirectionDefaultRequestDto Request { get; set; } = new GetDirectionDefaultRequestDto();
+    public class DirectionRequestMessage
+    {
+        [JsonPropertyName("profile")]
+        public string Profile { get; set; } = "driving-car";
+        [JsonPropertyName("request-id")]
+        public string RequestId { get; set; } = string.Empty;
+        [JsonPropertyName("request")]
+        public GetDirectionRequestDto Request { get; set; } = new GetDirectionRequestDto();
+    }
 }

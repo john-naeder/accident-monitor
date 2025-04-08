@@ -1,4 +1,4 @@
-﻿namespace AccidentMonitoring.Application.Common.Models;
+﻿namespace AccidentMonitor.Application.Common.Models;
 
 public class Result
 {

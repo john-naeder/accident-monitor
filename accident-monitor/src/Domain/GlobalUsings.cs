@@ -1,2 +1,2 @@
-﻿global using AccidentMonitoring.Domain.Common;
-global using AccidentMonitoring.Domain.Enums;
+﻿global using AccidentMonitor.Domain.Common;
+global using AccidentMonitor.Domain.Enums;

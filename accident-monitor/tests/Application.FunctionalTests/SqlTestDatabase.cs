@@ -1,12 +1,12 @@
 ﻿using System.Data.Common;
-using AccidentMonitoring.Infrastructure.Data;
+using AccidentMonitor.Infrastructure.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Respawn;
 
-namespace AccidentMonitoring.Application.FunctionalTests;
+namespace AccidentMonitor.Application.FunctionalTests;
 public class SqlTestDatabase : ITestDatabase
 {
     private readonly string _connectionString = null!;
@@ -20,7 +20,7 @@ public class SqlTestDatabase : ITestDatabase
             .AddEnvironmentVariables()
             .Build();
 
-        var connectionString = configuration.GetConnectionString("AccidentMonitoringDb");
+        var connectionString = configuration.GetConnectionString("AccidentMonitorDb");
 
         Guard.Against.Null(connectionString);
 

@@ -1,12 +1,12 @@
-﻿using AccidentMonitoring.Domain.Constants;
-using AccidentMonitoring.Infrastructure.Data;
-using AccidentMonitoring.Infrastructure.Identity;
+﻿using AccidentMonitor.Domain.Constants;
+using AccidentMonitor.Infrastructure.Data;
+using AccidentMonitor.Infrastructure.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AccidentMonitoring.Application.FunctionalTests;
+namespace AccidentMonitor.Application.FunctionalTests;
 [SetUpFixture]
 public partial class Testing
 {

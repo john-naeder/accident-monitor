@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace AccidentMonitoring.Web.Infrastructure;
+namespace AccidentMonitor.Web.Infrastructure;
 public static class MethodInfoExtensions
 {
     public static bool IsAnonymous(this MethodInfo method)

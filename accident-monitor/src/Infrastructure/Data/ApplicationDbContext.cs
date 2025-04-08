@@ -1,23 +1,21 @@
 ﻿using System.Reflection;
-using AccidentMonitoring.Application.Common.Interfaces;
-using AccidentMonitoring.Domain.Entities.Accident;
-using AccidentMonitoring.Infrastructure.Identity;
+using AccidentMonitor.Application.Common.Interfaces;
+using AccidentMonitor.Domain.Entities.Accident;
+using AccidentMonitor.Domain.Entities.MapStuff.Polygons;
+using AccidentMonitor.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 
-namespace AccidentMonitoring.Infrastructure.Data;
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
+namespace AccidentMonitor.Infrastructure.Data;
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
 {
-    public DbSet<AccidentEntity> Accidents => Set<AccidentEntity>();
-
-    public DbSet<AccidentDetails> AccidentDetails => Set<AccidentDetails>();
-
+    public DbSet<CitizenEntity> Citizens => Set<CitizenEntity>();
     public DbSet<VehicleEntity> Vehicles => Set<VehicleEntity>();
-
-    public DbSet<AccidentVehicle> AccidentVehicles => Set<AccidentVehicle>();
+    public DbSet<AccidentEntity> Accidents => Set<AccidentEntity>();
+    public DbSet<AccidentDetails> AccidentDetails => Set<AccidentDetails>();
+    public DbSet<AccidentInvolved> AccidentInvolved => Set<AccidentInvolved>();
+    public DbSet<PolygonCoordinate> PolygonCoordinates => Set<PolygonCoordinate>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

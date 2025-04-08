@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <RootNamespace>AccidentMonitoring.Application.FunctionalTests</RootNamespace>
-        <AssemblyName>AccidentMonitoring.Application.FunctionalTests</AssemblyName>
+        <RootNamespace>AccidentMonitor.Application.FunctionalTests</RootNamespace>
+        <AssemblyName>AccidentMonitor.Application.FunctionalTests</AssemblyName>
         <IsPublishable>false</IsPublishable>
     </PropertyGroup>
 

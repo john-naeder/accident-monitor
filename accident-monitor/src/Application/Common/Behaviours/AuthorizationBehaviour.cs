@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
-using AccidentMonitoring.Application.Common.Exceptions;
-using AccidentMonitoring.Application.Common.Interfaces;
-using AccidentMonitoring.Application.Common.Security;
+using AccidentMonitor.Application.Common.Exceptions;
+using AccidentMonitor.Application.Common.Interfaces;
+using AccidentMonitor.Application.Common.Security;
 
-namespace AccidentMonitoring.Application.Common.Behaviours;
+namespace AccidentMonitor.Application.Common.Behaviours;
 public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly IUser _user;

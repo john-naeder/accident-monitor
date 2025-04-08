@@ -1,7 +1,7 @@
-﻿using AccidentMonitoring.Application.WeatherForecasts.Queries.GetWeatherForecasts;
+﻿using AccidentMonitor.Application.WeatherForecasts.Queries.GetWeatherForecasts;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace AccidentMonitoring.Web.Endpoints;
+namespace AccidentMonitor.Web.Endpoints;
 public class WeatherForecasts : EndpointGroupBase
 {
     public override void Map(WebApplication app)

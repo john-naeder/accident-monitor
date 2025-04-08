@@ -1,9 +1,9 @@
-﻿using AccidentMonitoring.Domain.Common;
+﻿using AccidentMonitor.Domain.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace AccidentMonitoring.Infrastructure.Data.Interceptors;
+namespace AccidentMonitor.Infrastructure.Data.Interceptors;
 public class DispatchDomainEventsInterceptor(IMediator mediator) : SaveChangesInterceptor
 {
     private readonly IMediator _mediator = mediator;
