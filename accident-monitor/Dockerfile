@@ -4,7 +4,7 @@ WORKDIR /accident-monitor-app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 as build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 COPY ["./*.props", "./"]
 COPY ["./*.sln", "./"]
 COPY ["./src/Domain/Domain.csproj", "./src/Domain/"]
@@ -19,14 +19,21 @@ COPY ["./tests/Application.UnitTests/Application.UnitTests.csproj", "./tests/App
 COPY ["./tests/Domain.UnitTests/Domain.UnitTests.csproj", "./tests/Domain.UnitTests/"]
 COPY ["./tests/Infrastructure.IntegrationTests/Infrastructure.IntegrationTests.csproj", "./tests/Infrastructure.IntegrationTests/"]
 
-RUN dotnet restore "AccidentMonitoring.sln"
+RUN dotnet restore "AccidentMonitor.sln"
 COPY [".", "./"]
 
 WORKDIR "/accident-monitor-app/src/Web"
-RUN dotnet build "Web.csproj" -c Release -o /accident-monitor-app/publish
+
+# List the contents of the current directory for debugging
+RUN ls -la /accident-monitor-app/src/Web
+
+# List the contents of the src directory for debugging
+RUN ls -la /accident-monitor-app/src
+
+RUN dotnet build "./src/Web/Web.csproj" -c Release -o /accident-monitor-app/publish
 
 FROM build AS publish
-RUN dotnet publish "Web.csproj" -c Release -o /accident-monitor-app/publish
+RUN dotnet publish "./src/Web/Web.csproj" -c Release -o /accident-monitor-app/publish
 
 FROM base AS final
 WORKDIR /app
@@ -34,4 +41,4 @@ WORKDIR /app
 COPY --from=publish /accident-monitor-app/publish .
 
 # Set entry point
-ENTRYPOINT ["dotnet", "AccidentMonitoring.Web.dll"]
+ENTRYPOINT ["dotnet", "AccidentMonitor.Web.dll"]
