@@ -16,6 +16,12 @@ public class AccidentEntityConfiguration : IEntityTypeConfiguration<AccidentEnti
         builder.Property(a => a.Longitude).IsRequired();
         builder.Property(a => a.Latitude).IsRequired();
 
+        builder.ToTable(t =>
+        {
+            t.HasCheckConstraint("CK_Coordinate_Latitude_Range", "[Latitude] >= -90 AND [Latitude] <= 90");
+            t.HasCheckConstraint("CK_Coordinate_Longitude_Range", "[Longitude] >= -180 AND [Longitude] <= 180");
+        });
+
         builder.HasMany(a => a.AccidentInvolved)
             .WithOne(av => av.Accident)
             .HasForeignKey(av => av.AccidentId)
