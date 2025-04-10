@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccidentMonitor.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250408212937_InitMigration")]
+    [Migration("20250410102018_InitMigration")]
     partial class InitMigration
     {
         /// <inheritdoc />
@@ -276,7 +276,12 @@ namespace AccidentMonitor.Infrastructure.Migrations
 
                     b.HasIndex("AccidentId");
 
-                    b.ToTable("PolygonCoordinates");
+                    b.ToTable("PolygonCoordinates", t =>
+                        {
+                            t.HasCheckConstraint("CK_Coordinate_Latitude_Range", "[Latitude] >= -90 AND [Latitude] <= 90");
+
+                            t.HasCheckConstraint("CK_Coordinate_Longitude_Range", "[Longitude] >= -180 AND [Longitude] <= 180");
+                        });
                 });
 
             modelBuilder.Entity("AccidentMonitor.Infrastructure.Identity.ApplicationUser", b =>

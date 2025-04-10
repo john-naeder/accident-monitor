@@ -121,6 +121,8 @@ namespace AccidentMonitor.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PolygonCoordinates", x => x.Guid);
+                    table.CheckConstraint("CK_Coordinate_Latitude_Range", "[Latitude] >= -90 AND [Latitude] <= 90");
+                    table.CheckConstraint("CK_Coordinate_Longitude_Range", "[Longitude] >= -180 AND [Longitude] <= 180");
                     table.ForeignKey(
                         name: "FK_PolygonCoordinates_Accidents_AccidentId",
                         column: x => x.AccidentId,

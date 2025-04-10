@@ -273,7 +273,12 @@ namespace AccidentMonitor.Infrastructure.Migrations
 
                     b.HasIndex("AccidentId");
 
-                    b.ToTable("PolygonCoordinates");
+                    b.ToTable("PolygonCoordinates", t =>
+                        {
+                            t.HasCheckConstraint("CK_Coordinate_Latitude_Range", "[Latitude] >= -90 AND [Latitude] <= 90");
+
+                            t.HasCheckConstraint("CK_Coordinate_Longitude_Range", "[Longitude] >= -180 AND [Longitude] <= 180");
+                        });
                 });
 
             modelBuilder.Entity("AccidentMonitor.Infrastructure.Identity.ApplicationUser", b =>
