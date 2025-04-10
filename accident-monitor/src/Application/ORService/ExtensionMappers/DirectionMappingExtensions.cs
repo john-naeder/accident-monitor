@@ -12,7 +12,7 @@ public static class DirectionMappingExtensions
     /// </summary>
     /// <param name="source">The original routing response.</param>
     /// <returns>The mapped <see cref="DirectionCutResponseDto"/>.</returns>
-    public static DirectionCutResponseDto ToDirectionCutResponse(this GetDirectionAdvancedResponseDto source)
+    public static DirectionCutResponseDto ToDirectionCutResponseDto(this GetDirectionAdvancedResponseDto source)
     {
         ArgumentNullException.ThrowIfNull(source);
 

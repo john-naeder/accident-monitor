@@ -13,7 +13,7 @@ public class AccidentReport : EndpointGroupBase
         app.MapGroup(this)
             //.RequireAuthorization()
             .MapPost(ReportAccident, "/report-accident")
-            .MapPut(UpdateAccidentStatus, "/update-resolve/{accidentId}");
+            .MapPut(UpdateAccidentStatus, "/update-resolve");
     }
 
     public async Task<Created<Guid>> ReportAccident(ISender sender, CreateAccidentOnReportCommand command)

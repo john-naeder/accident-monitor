@@ -37,7 +37,7 @@ public class GetDirectionAdvancedQueryHandler(IORService orServices,
         var response = await _orServices.GetAdvancedRoutingDirectionAsync<GetDirectionAdvancedResponseDto>(
             request.Profile, request.RequestDto);
 
-        return response.ToDirectionCutResponse();
+        return response.ToDirectionCutResponseDto();
     }
 
 }

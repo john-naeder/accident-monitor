@@ -39,7 +39,7 @@
         }
       }
     },
-    "/api/AccidentReport/update-resolve/{accidentId}": {
+    "/api/AccidentReport/update-resolve": {
       "put": {
         "tags": [
           "AccidentReport"
@@ -48,7 +48,7 @@
         "parameters": [
           {
             "name": "accidentId",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",
@@ -690,18 +690,18 @@
             "type": "string",
             "format": "date-time"
           },
-          "latitude": {
+          "longitude": {
             "type": "number",
             "format": "double"
           },
-          "longitude": {
+          "latitude": {
             "type": "number",
             "format": "double"
           },
           "severity": {
             "$ref": "#/components/schemas/AccidentSeverity"
           },
-          "isBlockingWay": {
+          "is_blocking_way": {
             "type": "boolean"
           }
         }
@@ -864,20 +864,21 @@
           "coordinates": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CoordinateDto"
+              "type": "array",
+              "items": {
+                "type": "number",
+                "format": "double"
+              }
             }
           },
           "geometry_simplify": {
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           },
           "geometry": {
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           },
           "language": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "options": {
             "nullable": true,

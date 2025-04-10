@@ -1,4 +1,6 @@
-﻿namespace AccidentMonitor.Domain.Entities.Accident;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AccidentMonitor.Domain.Entities.Accident;
 public class CitizenEntity : BaseAuditableEntity
 {
     public CitizenEntity(
@@ -23,6 +25,7 @@ public class CitizenEntity : BaseAuditableEntity
     public string Nationality { get; set; }
     public string PlaceOfOrigin { get; set; }
     public string PlaceOfResidence { get; set; }
+    [Phone]
     public string VerifiedPhoneNumber { get; set; }
     public virtual ICollection<AccidentInvolved> AccidentsInvolved { get; set; } = [];
     public virtual ICollection<VehicleEntity> Vehicles { get; set; } = [];

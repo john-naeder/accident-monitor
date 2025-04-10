@@ -1,4 +1,5 @@
-﻿using AccidentMonitor.Application.Common.Interfaces;
+﻿using System.Text.Json.Serialization;
+using AccidentMonitor.Application.Common.Interfaces;
 using AccidentMonitor.Application.Helpers;
 using AccidentMonitor.Domain.Entities.Accident;
 using AccidentMonitor.Domain.Enums;
@@ -6,10 +7,15 @@ using AccidentMonitor.Domain.Enums;
 namespace AccidentMonitor.Application.Accident.Commands.CreateAccidentReport;
 public record CreateAccidentOnReportCommand : IRequest<Guid>
 {
+    [JsonPropertyName("time")]
     public required DateTime Time { get; init; }
+    [JsonPropertyName("longitude")]
     public double Latitude { get; init; }
+    [JsonPropertyName("latitude")]
     public double Longitude { get; init; }
+    [JsonPropertyName("severity")]
     public AccidentSeverity Severity { get; init; }
+    [JsonPropertyName("is_blocking_way")]
     public bool IsBlockingWay { get; init; }
 }
 public class CreateAccidentReportCommandHandler(IAccidentRepository repository) : IRequestHandler<CreateAccidentOnReportCommand, Guid>

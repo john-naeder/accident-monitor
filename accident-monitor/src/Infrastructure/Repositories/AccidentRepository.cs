@@ -12,8 +12,8 @@ public class AccidentRepository(IApplicationDbContext context) : IAccidentReposi
 
     public async Task<AccidentEntity> AddAsync(AccidentEntity entity)
     {
-        await _context.Accidents.AddAsync(entity);
-        return entity;
+        var result = await _context.Accidents.AddAsync(entity);
+        return result.Entity;
     }
 
     public async Task<AccidentEntity?> DeleteAsync(Guid id)
