@@ -23,10 +23,15 @@ namespace AccidentMonitor.Infrastructure.Data.Configurations.MapStuff
                 coordinateBuilder.Property(c => c.Longitude)
                     .HasColumnName("Longitude")
                     .IsRequired();
-
                 coordinateBuilder.Property(c => c.Latitude)
                     .HasColumnName("Latitude")
                     .IsRequired();
+            });
+            // TODO: Fix the check constraint, it does not appear in the database 
+            builder.ToTable(t =>
+            {
+                t.HasCheckConstraint("CK_Coordinate_Latitude_Range", "[Latitude] >= -90 AND [Latitude] <= 90");
+                t.HasCheckConstraint("CK_Coordinate_Longitude_Range", "[Longitude] >= -180 AND [Longitude] <= 180");
             });
 
             builder.Property(pc => pc.AccidentId).IsRequired();

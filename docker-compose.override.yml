@@ -25,6 +25,7 @@ services:
       ConnectionStrings__AccidentMonitorDB: "Server=accident-monitor-db,1433;Database=AccidentMonitorDB;User Id=sa;Password=#TaoSieuDepTrai123;TrustServerCertificate=True;"
       MqttConnectionConfig__Broker: "mosquitto"
       MqttConnectionConfig__ClientId: "accident-monitor"
+      MqttConnectionConfig__Password: "Taodeptrai123@"
       ORS__Uri: "http://ors-app"
       ORS__Port: 80
       ORS_BasePath: "/v2"

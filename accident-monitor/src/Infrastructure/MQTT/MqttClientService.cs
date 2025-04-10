@@ -1,10 +1,19 @@
 ﻿using System.Security.Authentication;
 using System.Text.Json;
+using AccidentMonitor.Application.Accident.Dtos;
+using AccidentMonitor.Application.BlockPolygon.Mappers;
 using AccidentMonitor.Application.Common.Interfaces;
 using AccidentMonitor.Application.Common.Results;
+using AccidentMonitor.Application.ORService.Dto;
+using AccidentMonitor.Application.ORService.ExtensionMappers;
+using AccidentMonitor.Application.ORService.Queries.GetDirectionAdvanced.Dtos;
 using AccidentMonitor.Application.ORService.Queries.GetDirections.Dtos;
+using AccidentMonitor.Domain.Entities.Accident;
 using AccidentMonitor.Infrastructure.MQTT.MQTTMessage.Request;
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
 using MQTTnet;
 using MQTTnet.Adapter;
 using MQTTnet.Formatter;
@@ -21,7 +30,7 @@ namespace AccidentMonitor.Infrastructure.MQTT
         private readonly MqttConnectionConfiguration _config;
         private readonly MqttClientFactory _mqttClientFactory;
         private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly IORService _orService;
+        private readonly IServiceProvider _serviceProvider;
         private bool _isDisposed;
         public event Action<string, string>? OnMessageReceived;
 
@@ -30,15 +39,15 @@ namespace AccidentMonitor.Infrastructure.MQTT
         public MqttClientService(
             MqttConnectionConfiguration options,
             ILogger<MqttClientService> logger,
-            IORService orService
+            IServiceProvider serviceProvider
             )
         {
             _config = options;
             _logger = logger;
-            _orService = orService;
             _mqttClientFactory = new MqttClientFactory();
             _mqttClient = _mqttClientFactory.CreateMqttClient();
             _cancellationTokenSource = new CancellationTokenSource();
+            _serviceProvider = serviceProvider;
             ConfigureClientHandlers();
         }
         private void ConfigureClientHandlers()
@@ -185,7 +194,9 @@ namespace AccidentMonitor.Infrastructure.MQTT
 
             foreach (var topic in _config.SubTopics)
             {
-                subscribeOptions = subscribeOptions.WithTopicFilter(topic, MqttQualityOfServiceLevel.AtLeastOnce);
+                var topicFilter = topic.Contains("{id}") ? topic.Replace("{id}", "+") : topic;
+
+                subscribeOptions = subscribeOptions.WithTopicFilter(topicFilter, MqttQualityOfServiceLevel.AtLeastOnce);
             }
 
             var builtSubscribeOptions = subscribeOptions.Build();
@@ -230,17 +241,22 @@ namespace AccidentMonitor.Infrastructure.MQTT
 
                 // Raise the event with the received message
                 OnMessageReceived?.Invoke(topic, payload);
-
                 switch (topic)
                 {
                     case var t when t.StartsWith(_config.SubTopics[0]):
                         //HandleHumidity(payload);
                         break;
-                    case var t when t.StartsWith(_config.SubTopics[1]):
-                        //HandleDeviceStatus(payload);
+                    case var t when t.StartsWith(_config.SubTopics[1].Split('{')[0]):
+                        var topicId = TopicParser.ExtractId(_config.SubTopics[1], t)!;
+                        await HandleAccidentReport(topicId, payload, _cancellationTokenSource.Token);
                         break;
-                    case var t when t.StartsWith(_config.SubTopics[2]):
-                        await HandleDirectionRequestAsync(payload);
+                    case var t when t.StartsWith(_config.SubTopics[2].Split('{')[0]):
+                        topicId = TopicParser.ExtractId(_config.SubTopics[2], t)!;
+                        await HandleDirectionRequestAsync(topicId, payload);
+                        break;
+                    case var t when t.StartsWith(_config.SubTopics[3].Split('{')[0]):
+                        topicId = TopicParser.ExtractId(_config.SubTopics[3], t)!;
+                        await HandleAdvancedDirectionRequestAsync(topicId, payload);
                         break;
                     default:
                         _logger.LogWarning("Unhandled topic: {Topic}", topic);
@@ -256,7 +272,8 @@ namespace AccidentMonitor.Infrastructure.MQTT
 
         public async Task<ServiceResult> PublishAsync<T>(string topic, T dto)
         {
-            string jsonPayload = Newtonsoft.Json.JsonConvert.SerializeObject(dto);
+
+            string jsonPayload = JsonSerializer.Serialize(dto);
 
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic(topic)
@@ -270,6 +287,8 @@ namespace AccidentMonitor.Infrastructure.MQTT
                 response.ReasonString
             );
         }
+
+        public void Dispose() => DisposeAsync().AsTask().Wait();
 
         public async ValueTask DisposeAsync()
         {
@@ -294,15 +313,13 @@ namespace AccidentMonitor.Infrastructure.MQTT
             {
                 _logger.LogError(ex, "Error during MQTT client disposal");
             }
-            //finally
-            //{
-            //    _cancellationTokenSource.Dispose();
-            //    _mqttClient.Dispose();
-            //}
+            finally
+            {
+                _cancellationTokenSource.Dispose();
+                _mqttClient.Dispose();
+                GC.SuppressFinalize(this);
+            }
         }
-
-        public void Dispose() => DisposeAsync().AsTask().Wait();
-
 
         public async Task<TResponse> HealthCheck<TResponse>()
         {
@@ -332,10 +349,45 @@ namespace AccidentMonitor.Infrastructure.MQTT
             throw new NotImplementedException();
         }
 
-        private async Task HandleDirectionRequestAsync(string payload)
+        private async Task HandleAccidentReport(string topicId, string payload, CancellationToken cancellationToken)
         {
-            Console.WriteLine(payload);
-            _logger.LogWarning(payload);
+            try
+            {
+                var accidentDto = JsonSerializer.Deserialize<AccidentDto>(payload);
+                var newAccident = new AccidentEntity
+                {
+                    Guid = Guid.NewGuid(),
+                    Latitude = (float)accidentDto!.Latitude,
+                    Longitude = (float)accidentDto.Longitude,
+                    Severity = accidentDto.Severity,
+                    Timestamp = DateTime.UtcNow,
+                    IsBlockingWay = accidentDto.IsBlockingWay,
+
+                };
+
+                if (accidentDto == null)
+                {
+                    _logger.LogError($"Invalid accident report payload: {payload}");
+                    return;
+                }
+                using var scope = _serviceProvider.CreateScope();
+                var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+                var accidentRepository = scope.ServiceProvider.GetRequiredService<IAccidentRepository>();
+
+                var accidentEntity = mapper.Map<AccidentEntity>(accidentDto);
+                var result = await accidentRepository.AddAsync(accidentEntity);
+                await accidentRepository.SaveChangesAsync(cancellationToken);
+
+                await PublishAsync($"rsu/Responses/AccidentReport/{topicId}", result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing routing request with payload: {Payload}", payload);
+            }
+        }
+
+        private async Task HandleDirectionRequestAsync(string topicId, string payload)
+        {
             try
             {
                 var requestMessage = JsonSerializer.Deserialize<DirectionRequestMessage>(payload);
@@ -345,17 +397,52 @@ namespace AccidentMonitor.Infrastructure.MQTT
                     return;
                 }
 
-                _logger.LogInformation("Received routing request with RequestId: {RequestId}, Profile: {Profile}",
-                            requestMessage.RequestId, requestMessage.Profile);
+                var result = new GetDirectionResponseDto();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var orsService = scope.ServiceProvider.GetRequiredService<IORService>();
+                    result = await orsService.GetRoutingDirectionAsync<GetDirectionResponseDto>(requestMessage.Profile, requestMessage.Request);
 
-                var result = await _orService.GetRoutingDirectionAsync<GetDirectionResponseDto>(
-                    requestMessage.Profile, requestMessage.Request);
+                }
+                string responseTopic = $"rsu/Responses/Directions/{topicId}";
+                var response = result.ToDirectionCutResponseDto();
+                await PublishAsync(responseTopic, response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing routing request with payload: {Payload}", payload);
+            }
+        }
 
-                string responseTopic = $"rsu/Response/Directions/{requestMessage.RequestId}";
-                var publishResult = await PublishAsync(responseTopic, result);
-                _logger.LogInformation("Sent routing result to topic {ResponseTopic} with result: {Result}",
-                            responseTopic, publishResult);
-                await Task.CompletedTask;
+        private async Task HandleAdvancedDirectionRequestAsync(string topicId, string payload)
+        {
+            try
+            {
+                var requestMessage = JsonSerializer.Deserialize<AdvancedDirectionRequestMessage>(payload);
+                using var scope = _serviceProvider.CreateScope();
+                var blockedPolygonRepository = scope.ServiceProvider.GetRequiredService<IBlockedPolygonCoordRepository>();
+                var orservice = scope.ServiceProvider.GetRequiredService<IORService>();
+
+                var blockedPolygons = await blockedPolygonRepository.GetAllUnResolvedAsync();
+                var blockedPolygonCoordinates = blockedPolygons
+                    .GroupBy(p => p.AccidentId)
+                    .Select(PolygonMapper.MapToMultiBlockedPolygon).ToList();
+
+                var blockedPolygon = new AvoidPolygonsDto
+                (
+                    Coordinates: blockedPolygonCoordinates
+                        .Select(p => p.Select(l => l.Select(c => new CoordinateDto(c.Longitude, c.Latitude)).ToList()).ToList())
+                        .ToList(),
+                    Type: "MultiPolygon"
+                );
+
+                requestMessage!.Request.RoutingOptions!.AvoidPolygons = blockedPolygon;
+
+                var result = await orservice.GetAdvancedRoutingDirectionAsync<GetDirectionAdvancedResponseDto>(requestMessage.Profile, requestMessage.Request);
+
+                var responseTopic = $"rsu/Responses/AdvancedDirections/{topicId}";
+                var response = result.ToDirectionCutResponseDto();
+                await PublishAsync(responseTopic, result);
             }
             catch (Exception ex)
             {

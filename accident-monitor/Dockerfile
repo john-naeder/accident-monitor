@@ -1,37 +1,40 @@
-﻿# Build stage
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS base
-WORKDIR /accident-monitor-app
+﻿# Base image for runtime
+FROM mcr.microsoft.com/dotnet/runtime:9.0-slim AS base
+WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 as build
-COPY ["./*.props", "./"]
-COPY ["./*.sln", "./"]
-COPY ["./src/Domain/Domain.csproj", "./src/Domain/"]
-COPY ["./src/Application/Application.csproj", "./src/Application/"]
-COPY ["./src/Infrastructure/Infrastructure.csproj", "./src/Infrastructure/"]
-COPY ["./src/ServiceDefaults/ServiceDefaults.csproj", "./src/ServiceDefaults/"]
-COPY ["./src/Web/Web.csproj", "./src/Web/"]
-COPY ["./src/AppHost/AppHost.csproj", "./src/AppHost/"]
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src-app
 
-COPY ["./tests/Application.FunctionalTests/Application.FunctionalTests.csproj", "./tests/Application.FunctionalTests/"]
-COPY ["./tests/Application.UnitTests/Application.UnitTests.csproj", "./tests/Application.UnitTests/"]
-COPY ["./tests/Domain.UnitTests/Domain.UnitTests.csproj", "./tests/Domain.UnitTests/"]
-COPY ["./tests/Infrastructure.IntegrationTests/Infrastructure.IntegrationTests.csproj", "./tests/Infrastructure.IntegrationTests/"]
+# Copy solution and project files for restore
+COPY ["*.sln", "*.props", "src/**/*.csproj", "tests/**/*.csproj", "./"]
+RUN dotnet restore "AccidentMonitor.sln"
 
-RUN dotnet restore "AccidentMonitoring.sln"
-COPY [".", "./"]
+# Copy entire source code and build
+COPY . ./
+WORKDIR /src-app/src/Web
+RUN dotnet build "./Web.csproj" -c $BUILD_CONFIGURATION -o /accident-monitor-app/build
 
-WORKDIR "/accident-monitor-app/src/Web"
-RUN dotnet build "Web.csproj" -c Release -o /accident-monitor-app/publish
-
+# Publish stage
 FROM build AS publish
-RUN dotnet publish "Web.csproj" -c Release -o /accident-monitor-app/publish
+ARG BUILD_CONFIGURATION=Release
 
+# Install Node.js and npm during build only
+RUN apt-get update && apt-get install -y nodejs npm && \
+    dotnet publish "./Web.csproj" -c $BUILD_CONFIGURATION -o /accident-monitor-app/publish /p:UseAppHost=false && \
+    apt-get remove -y nodejs npm && apt-get clean
+
+# Final runtime stage
 FROM base AS final
 WORKDIR /app
-
 COPY --from=publish /accident-monitor-app/publish .
 
-# Set entry point
-ENTRYPOINT ["dotnet", "AccidentMonitoring.Web.dll"]
+# Set environment variables
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+ENV ASPNETCORE_URLS=http://+:80
+
+# Entry point for the application
+ENTRYPOINT ["dotnet", "AccidentMonitor.Web.dll"]

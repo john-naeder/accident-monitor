@@ -14,9 +14,9 @@ namespace AccidentMonitor.Application.Converter
             }
 
             reader.Read();
-            var longitude = reader.GetSingle();
+            var longitude = reader.GetDouble();
             reader.Read();
-            var latitude = reader.GetSingle();
+            var latitude = reader.GetDouble();
             reader.Read();
 
             return reader.TokenType != JsonTokenType.EndArray

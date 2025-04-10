@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using AccidentMonitor.Application.Converter;
 using AccidentMonitor.Application.ORService.Dto;
 
 namespace AccidentMonitor.Application.ORService.Queries.GetDirectionAdvanced.Dtos;
@@ -10,7 +11,7 @@ namespace AccidentMonitor.Application.ORService.Queries.GetDirectionAdvanced.Dto
 public class GetDirectionAdvanceRequestDto
 {
     /// <summary>
-    /// Collection of waypoints that are desiredintermediate points on the route.
+    /// Collection of waypoints that are desired intermediate points on the route.
     /// [
     ///     {longitude1, latitude1}, // this one is the starting point
     ///     {longitude2, latitude2}, // this one is a waypoint
@@ -19,7 +20,7 @@ public class GetDirectionAdvanceRequestDto
     /// ]
     /// </summary>
     [JsonPropertyName("coordinates")]
-    public List<CoordinateDto> WaypointCoordinates { get; set; } = [];
+    public List<double[]> WaypointCoordinates { get; set; } = [];
 
 
     /// <summary>
@@ -27,7 +28,7 @@ public class GetDirectionAdvanceRequestDto
     /// The value is expected as a string "true" or "false".
     /// </summary>
     [JsonPropertyName("geometry_simplify")]
-    public bool? GeometrySimplify { get; set; } = false;
+    public bool GeometrySimplify { get; set; } = false;
 
 
     /// <summary>
@@ -35,7 +36,7 @@ public class GetDirectionAdvanceRequestDto
     /// The value is expected as a string "true" or "false".
     /// </summary>
     [JsonPropertyName("geometry")]
-    public bool? Geometry { get; set; } = false;
+    public bool Geometry { get; set; } = false;
 
     /// <summary>
     /// The language of the route instructions. 
@@ -51,7 +52,7 @@ public class GetDirectionAdvanceRequestDto
     ///    ["zh"]
     /// </summary>
     [JsonPropertyName("language")]
-    public string? Language { get; set; } = "en";
+    public string Language { get; set; } = "en";
 
 
     /// <summary>
@@ -71,7 +72,7 @@ public class GetDirectionAdvanceRequestDto
     ///     
     /// </summary>
     [JsonPropertyName("options")]
-    public ORSDirectionAvoidOptionsDto? RoutingOptions { get; set; }
+    public ORSDirectionAvoidOptionsDto? RoutingOptions { get; set; } = new ORSDirectionAvoidOptionsDto();
 
     /// <summary>
     /// Represents the routing options for the advanced directions request.
@@ -83,7 +84,7 @@ public class GetDirectionAdvanceRequestDto
         /// The polygon avoidance options defined in the GeoJson format.
         /// </summary>
         [JsonPropertyName("avoid_polygons")]
-        public AvoidPolygonsDto? AvoidPolygons { get; set; }
+        public AvoidPolygonsDto? AvoidPolygons { get; set; } 
         //[JsonPropertyName("avoid_features")]
         //public string[]? AvoidFeatures { get; set; } = [];
         //[JsonPropertyName("avoid_borders")]
@@ -99,7 +100,7 @@ public class GetDirectionAdvanceRequestDto
     /// 
     /// </summary>
     [JsonPropertyName("units")]
-    public string? Units { get; set; } = "km";
+    public string? Units { get; set; } = "m";
 
     [JsonPropertyName("preference")]
     public string? Preference = "recommended";
