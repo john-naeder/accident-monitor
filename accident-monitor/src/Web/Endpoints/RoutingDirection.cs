@@ -14,8 +14,8 @@ public class RoutingDirection : EndpointGroupBase
 
     public override void Map(WebApplication app)
     {
-        var group = app.MapGroup(this);
-        //.RequireAuthorization();
+        var group = app.MapGroup(this)
+        .RequireAuthorization();
         group.MapGet("status", GetStatus);
         group.MapGet("health", HealthCheck);
         group.MapGet("direction/{profile}", GetDirection);

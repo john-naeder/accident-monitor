@@ -22,11 +22,6 @@ RUN dotnet build "./Web.csproj" -c $BUILD_CONFIGURATION -o /accident-monitor-app
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 
-# Install Node.js and npm during build only
-RUN apt-get update && apt-get install -y nodejs npm && \
-    dotnet publish "./Web.csproj" -c $BUILD_CONFIGURATION -o /accident-monitor-app/publish /p:UseAppHost=false && \
-    apt-get remove -y nodejs npm && apt-get clean
-
 # Final runtime stage
 FROM base AS final
 WORKDIR /app

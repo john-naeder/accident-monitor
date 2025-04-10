@@ -16,7 +16,6 @@ public static class DependencyInjection
         builder.Services.AddScoped<IUser, CurrentUser>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddExceptionHandler<CustomExceptionHandler>();
-        builder.Services.AddRazorPages();
         builder.Services.ConfigureHttpJsonOptions(options =>
         {
             options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());

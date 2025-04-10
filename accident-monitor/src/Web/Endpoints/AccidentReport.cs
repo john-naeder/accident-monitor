@@ -11,7 +11,7 @@ public class AccidentReport : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            //.RequireAuthorization()
+            .RequireAuthorization()
             .MapPost(ReportAccident, "/report-accident")
             .MapPut(UpdateAccidentStatus, "/update-resolve");
     }

@@ -707,7 +707,7 @@
         }
       },
       "AccidentSeverity": {
-        "type": "integer",
+        "type": "string",
         "description": "",
         "x-enumNames": [
           "Low",
@@ -715,9 +715,9 @@
           "High"
         ],
         "enum": [
-          1,
-          2,
-          3
+          "Low",
+          "Medium",
+          "High"
         ]
       },
       "UpdateAccidentResolvedStatusCommand": {

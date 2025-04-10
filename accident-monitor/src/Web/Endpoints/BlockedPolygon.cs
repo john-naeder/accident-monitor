@@ -10,7 +10,7 @@ public class BlockedPolygon : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-        //.RequireAuthorization()
+            .RequireAuthorization()
             .MapGet(GetBlockedPolygon, "/blocked-polygon")
             .MapGet(GetMultiBlockedPolygon, "/blocked-multi-polygon/");
     }
