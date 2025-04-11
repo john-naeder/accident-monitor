@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccidentMonitor.Infrastruct
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccidentMonitor.ServiceDefaults", "src\AccidentMonitor.ServiceDefaults\AccidentMonitor.ServiceDefaults.csproj", "{1ED9D82E-68A5-4981-AFF9-4FEAF304A0E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccidentMonitor.Web", "src\AccidentMonitor.Web\AccidentMonitor.Web.csproj", "{83BC2F00-59AF-45DF-BDEB-54EE592B1CA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccidentMonitor.WebApi", "src\AccidentMonitor.WebApi\AccidentMonitor.WebApi.csproj", "{83BC2F00-59AF-45DF-BDEB-54EE592B1CA3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccidentMonitor.Application.FunctionalTests", "tests\AccidentMonitor.Application.FunctionalTests\AccidentMonitor.Application.FunctionalTests.csproj", "{0479910B-6E3E-42E5-BFB1-2F0B62A27802}"
 EndProject

@@ -16,7 +16,7 @@ RUN dotnet restore "AccidentMonitor.sln"
 # Copy entire source code and build
 COPY . ./
 WORKDIR /src-app/src/Web
-RUN dotnet build "./AccidentMonitor.Web.csproj" -c $BUILD_CONFIGURATION -o /accident-monitor-app/build
+RUN dotnet build "./AccidentMonitor.WebApi.csproj" -c $BUILD_CONFIGURATION -o /accident-monitor-app/build
 
 # Publish stage
 FROM build AS publish
@@ -32,4 +32,4 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true
 ENV ASPNETCORE_URLS=http://+:80
 
 # Entry point for the application
-ENTRYPOINT ["dotnet", "AccidentMonitor.Web.dll"]
+ENTRYPOINT ["dotnet", "AccidentMonitor.WebApi.dll"]

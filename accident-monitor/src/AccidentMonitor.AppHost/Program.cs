@@ -1,11 +1,12 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var sql = builder.AddSqlServer("sql");
+var sqlServer = builder.AddSqlServer("sqlServer");
 
-var database = sql.AddDatabase("AccidentMonitorDb");
+var accidentsRecordDb = sqlServer.AddDatabase("AccidentMonitorDb");
 
-builder.AddProject<Projects.AccidentMonitor_Web>("web")
-    .WithReference(database)
-    .WaitFor(database);
+
+builder.AddProject<Projects.AccidentMonitor_WebApi>("accident-monitor-api")
+    .WithReference(accidentsRecordDb)
+    .WaitFor(accidentsRecordDb);
 
 builder.Build().Run();

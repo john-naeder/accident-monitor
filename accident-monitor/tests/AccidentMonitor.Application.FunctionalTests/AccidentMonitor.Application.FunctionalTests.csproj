@@ -47,7 +47,7 @@
     </ItemGroup>
     
     <ItemGroup>
-        <ProjectReference Include="..\..\src\AccidentMonitor.Web\AccidentMonitor.Web.csproj" />
+        <ProjectReference Include="..\..\src\AccidentMonitor.WebApi\AccidentMonitor.WebApi.csproj" />
     </ItemGroup>
 
 </Project>

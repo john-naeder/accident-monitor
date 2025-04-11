@@ -5,5 +5,5 @@ name: clean-architecture-azd
 services:
   web:
     language: csharp
-    project: ./src/AccidentMonitor.Web
+    project: ./src/AccidentMonitor.WebApi
     host: appservice

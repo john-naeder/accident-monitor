@@ -1,8 +1,8 @@
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var webServerPath = "./src/AccidentMonitor.Web";
-var webClientPath = "./src/AccidentMonitor.WebClient";
+var webServerPath = "./src/AccidentMonitor.WebApi";
+var webClientPath = "./src/AccidentMonitor.WebApp";
 var webUrl = "https://localhost:5001/";
 
 IProcess webProcess = null;

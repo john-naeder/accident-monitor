@@ -14,12 +14,12 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" />
+    <PackageReference Include="Aspire.Hosting.AppHost"/>
     <PackageReference Include="Aspire.Hosting.SqlServer" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AccidentMonitor.Web\AccidentMonitor.Web.csproj" />
+    <ProjectReference Include="..\AccidentMonitor.WebApi\AccidentMonitor.WebApi.csproj" />
   </ItemGroup>
 
 </Project>
