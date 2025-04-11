@@ -16,7 +16,7 @@ RUN dotnet restore "AccidentMonitor.sln"
 # Copy entire source code and build
 COPY . ./
 WORKDIR /src-app/src/Web
-RUN dotnet build "./Web.csproj" -c $BUILD_CONFIGURATION -o /accident-monitor-app/build
+RUN dotnet build "./AccidentMonitor.Web.csproj" -c $BUILD_CONFIGURATION -o /accident-monitor-app/build
 
 # Publish stage
 FROM build AS publish
