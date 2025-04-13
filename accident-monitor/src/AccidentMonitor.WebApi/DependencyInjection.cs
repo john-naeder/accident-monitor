@@ -4,6 +4,7 @@ using AccidentMonitor.Application.Converter;
 using AccidentMonitor.WebApi.Services;
 using Azure.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 
@@ -54,5 +55,22 @@ public static class DependencyInjection
                 new Uri(keyVaultUri),
                 new DefaultAzureCredential());
         }
+    }
+
+    public static IHostApplicationBuilder AddDefaultHealthChecks(this IHostApplicationBuilder builder)
+    {
+        builder.Services.AddRequestTimeouts(
+            configure: static timeouts =>
+                timeouts.AddPolicy("HealthChecks", TimeSpan.FromSeconds(5)));
+
+        builder.Services.AddOutputCache(
+            configureOptions: static caching =>
+                caching.AddPolicy("HealthChecks",
+                build: static policy => policy.Expire(TimeSpan.FromSeconds(10))));
+
+        builder.Services.AddHealthChecks()
+            .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
+
+        return builder;
     }
 }

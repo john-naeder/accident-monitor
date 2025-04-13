@@ -1,4 +1,4 @@
-services:
+﻿services:
   # ----------------- event-driven applications ------------------- #
   # node-red:
   #   image: nodered/node-red:latest
@@ -18,7 +18,7 @@ services:
   #     - net_sim
   # -------------------------- MQTT broker ------------------------ #
   mosquitto:
-    image: eclipse-mosquitto:latest
+    image: eclipse-mosquitto:2.0.21
     hostname: mosquitto
     container_name: mosquitto
     ports:
@@ -39,17 +39,24 @@ services:
     #     window: 120s
     networks:
       - net_sim
+    labels:
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.mosquitto.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.mosquitto.entrypoints=mqtt"
+      - "traefik.http.routers.mosquitto.rule=Host(`mosquitto.docker.localhost`)"
+      - "traefik.tcp.services.mosquitto.loadbalancer.server.port=1883"
     healthcheck:
       test: ["CMD", "mosquitto_sub", "-h", "127.0.0.1", "-p", "1880", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 20s
+
   # ---------------- ORS application configuration ---------------- #
   ors-app:
     container_name: ors-app
     ports:
-      - "8080:80" 
+      - "8081:80" 
     image: openrouteservice/openrouteservice:v9.1.1
     # user: "1000:1000" 
     volumes: 
@@ -65,6 +72,11 @@ services:
       ADDITIONAL_JAVA_OPTS: "" 
     networks:
       - net_sim
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ors-app.entrypoints=web"
+      - "traefik.http.services.ors-app.loadbalancer.server.port=80"      
+      - "traefik.http.routers.ors-app.rule=Host(`ors-app.docker.localhost`)"
     healthcheck:
      test: wget --no-verbose --tries=1 --spider http://localhost:8080/ors/v2/health || exit 1
      start_period: 10m
@@ -81,9 +93,10 @@ services:
     restart: unless-stopped
 
   # -------------------------- Accident monitor DB ------------------------ #
-
   accident-monitor-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: accident-monitor-db
+
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=${Sa_Password:-#TaoSieuDepTrai123}
@@ -101,7 +114,11 @@ services:
           start_period: 10s
     networks:
       - net_sim
+    labels:
+      - "traefik.enable=false"
+  # ------------------ Accident monitor DB Startup Config ------------------ #
   accident-monitor-db.configurator:
+    container_name: accident-monitor-db.configurator
     image: mcr.microsoft.com/mssql/server:2019-latest
     volumes:
       - ./accident-monitor-db/init:/docker-entrypoint-initdb.d
@@ -118,14 +135,53 @@ services:
     networks:
       - net_sim
     restart: on-failure
+    labels:
+      - "traefik.enable=false"
+
+
+# -------------------------- Reverse Proxy Traefik ------------------------ #
+  traefik-proxy:
+    image: traefik:v3.4.0-rc1
+    container_name: traefik-proxy
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    command: --api.insecure=true --providers.docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik-docker/traefik.yml:/etc/traefik/traefik.yml
+    networks: 
+      - net_sim
+
+  redis:
+    image: redis:8.0-rc1
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+    restart: unless-stopped
+    networks:
+      - net_sim
+    labels:
+      - "traefik.enable=false"
 
 networks:
   net_sim:
     driver: bridge
     driver_opts:
       com.docker.network.bridge.name: br0
+
 volumes:
   accident_monitor_data:
+    # driver: local
+    # driver_opts:
+    #     type: none
+    #     device: /home/accident_monitor_data
+    #     o: bind
+  redis_data:
 #     driver: local
 #     driver_opts:
 #       type: none

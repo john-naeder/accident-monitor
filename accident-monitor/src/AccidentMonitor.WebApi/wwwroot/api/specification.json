@@ -17,7 +17,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateAccidentOnReportCommand"
+                "$ref": "#/components/schemas/CreateAccidentCommand"
               }
             }
           },
@@ -36,12 +36,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/AccidentReport/update-resolve": {
@@ -88,12 +83,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/BlockedPolygon/blocked-polygon": {
@@ -711,18 +701,13 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     }
   },
   "components": {
     "schemas": {
-      "CreateAccidentOnReportCommand": {
+      "CreateAccidentCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -730,11 +715,11 @@
             "type": "string",
             "format": "date-time"
           },
-          "longitude": {
+          "latitude": {
             "type": "number",
             "format": "double"
           },
-          "latitude": {
+          "longitude": {
             "type": "number",
             "format": "double"
           },

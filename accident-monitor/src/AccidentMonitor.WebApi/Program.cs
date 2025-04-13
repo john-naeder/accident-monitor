@@ -1,7 +1,7 @@
 ﻿using AccidentMonitor.Application;
 using AccidentMonitor.Infrastructure;
-using AccidentMonitor.Infrastructure.Data;
 using AccidentMonitor.Infrastructure.MQTT;
+using AccidentMonitor.Infrastructure.Persistence.Data;
 using AccidentMonitor.ServiceDefaults;
 using AccidentMonitor.WebApi;
 
@@ -15,6 +15,9 @@ builder.AddKeyVaultIfConfigured();
 builder.AddApplicationServices();
 builder.AddInfrastructureServices();
 builder.AddWebServices();
+
+builder.Services.AddRequestTimeouts();
+builder.Services.AddOutputCache();
 
 var app = builder.Build();
 
@@ -30,7 +33,7 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseSwaggerUi(settings =>
@@ -44,7 +47,8 @@ app.MapFallbackToFile("index.html");
 app.UseExceptionHandler(options => { });
 
 app.Map("/", () => Results.Redirect("/api"));
-
+app.UseRequestTimeouts();
+app.UseOutputCache();
 app.MapDefaultEndpoints();
 app.MapEndpoints();
 

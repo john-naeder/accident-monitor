@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Entities\MapStuff\Directions\" />
+    <Folder Include="Events\BlockedPolygonEvents\" />
   </ItemGroup>
 
 </Project>

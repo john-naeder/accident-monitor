@@ -372,11 +372,11 @@ namespace AccidentMonitor.Infrastructure.MQTT
                 }
                 using var scope = _serviceProvider.CreateScope();
                 var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
-                var accidentRepository = scope.ServiceProvider.GetRequiredService<IAccidentRepository>();
+                var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
                 var accidentEntity = mapper.Map<AccidentEntity>(accidentDto);
-                var result = await accidentRepository.AddAsync(accidentEntity);
-                await accidentRepository.SaveChangesAsync(cancellationToken);
+                var result = await unitOfWork.AccidentRepository.AddAsync(accidentEntity, cancellationToken);
+                await unitOfWork.SaveChangesAsync(cancellationToken);
 
                 await PublishAsync($"rsu/Responses/AccidentReport/{topicId}", result);
             }

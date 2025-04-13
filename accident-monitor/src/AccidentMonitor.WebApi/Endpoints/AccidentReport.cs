@@ -1,5 +1,5 @@
 ﻿
-using AccidentMonitor.Application.Accident.Commands.CreateAccidentReport;
+using AccidentMonitor.Application.Accident.Commands.CreateAccident;
 using AccidentMonitor.Application.Accident.Commands.UpdateResolveStatus;
 using AccidentMonitor.Domain.Entities.Accident;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -11,12 +11,12 @@ public class AccidentReport : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .RequireAuthorization()
+            //.RequireAuthorization()
             .MapPost(ReportAccident, "/report-accident")
             .MapPut(UpdateAccidentStatus, "/update-resolve");
     }
 
-    public async Task<Created<Guid>> ReportAccident(ISender sender, CreateAccidentOnReportCommand command)
+    public async Task<Created<Guid>> ReportAccident(ISender sender, CreateAccidentCommand command)
     {
         var id = await sender.Send(command);
 

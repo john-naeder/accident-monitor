@@ -10,7 +10,7 @@ public class AccidentDto
     [JsonPropertyName("time")]
     public DateTime Timestamp { get; set; } = DateTime.MinValue;
     [JsonPropertyName("longitude")]
-    public double Longitude { get; set; } 
+    public double Longitude { get; set; }
     [JsonPropertyName("latitude")]
     public double Latitude { get; set; }
     public AccidentSeverity Severity { get; set; } = AccidentSeverity.Low;
@@ -22,7 +22,7 @@ public class AccidentDto
     {
         public Mapping()
         {
-            CreateMap<AccidentEntity, AccidentDto>()
+            CreateMap<AccidentDto, AccidentEntity>()
                 .ForMember(dest => dest.Guid, opt => opt.MapFrom(src => src.Guid))
                 .ForMember(dest => dest.Timestamp, opt => opt.MapFrom(src => src.Timestamp))
                 .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude))
@@ -30,7 +30,7 @@ public class AccidentDto
                 .ForMember(dest => dest.Severity, opt => opt.MapFrom(src => src.Severity))
                 .ForMember(dest => dest.ResolvedStatus, opt => opt.MapFrom(src => src.ResolvedStatus));
 
-            CreateMap<AccidentDto, AccidentEntity>()
+            CreateMap<AccidentEntity, AccidentDto>()
                 .ForMember(dest => dest.Guid, opt => opt.MapFrom(src => src.Guid))
                 .ForMember(dest => dest.Timestamp, opt => opt.MapFrom(src => src.Timestamp))
                 .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude))

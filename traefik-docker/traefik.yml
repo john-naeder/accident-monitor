@@ -1,0 +1,25 @@
+# Docker configuration backend
+
+log:
+  level: INFO
+
+providers:
+  docker:
+    exposedByDefault: false
+    defaultRule: "Host({{ trimPrefix `/` .Name }}.docker.localhost)"
+    network: accident_monitoring_net_sim
+
+
+api:
+  insecure: true
+  dashboard: true
+
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+  mqtt:
+    address: ":1883"
+
+

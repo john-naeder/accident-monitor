@@ -10,7 +10,7 @@ namespace AccidentMonitor.Application.Helpers
         /// Generates a square polygon's coordinates based on the source accident's location.
         /// </summary>
         /// <param name="source">The source accident containing the base longitude and latitude.</param>
-        /// <param name="accident">The AccidentEntity to which the generated coordinates will be assigned.</param>
+        /// <param name="accident">The CreatedAccident to which the generated coordinates will be assigned.</param>
         /// <param name="size">The offset size to determine the square's dimensions.</param>
         /// <returns>A list of BlockPolygon that define the square polygon.</returns>
         public static ICollection<PolygonCoordinate> GenerateSquareCoordinates(AccidentEntity source, float size = 0.00005F)

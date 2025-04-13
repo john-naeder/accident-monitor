@@ -1,11 +1,11 @@
 ﻿using AccidentMonitor.Application.Common.Interfaces;
 using AccidentMonitor.Domain.Constants;
-using AccidentMonitor.Infrastructure.Data;
-using AccidentMonitor.Infrastructure.Data.Interceptors;
 using AccidentMonitor.Infrastructure.Identity;
 using AccidentMonitor.Infrastructure.MQTT;
 using AccidentMonitor.Infrastructure.ORS;
-using AccidentMonitor.Infrastructure.Repositories;
+using AccidentMonitor.Infrastructure.Persistence.Data;
+using AccidentMonitor.Infrastructure.Persistence.Data.Interceptors;
+using AccidentMonitor.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -19,6 +19,7 @@ public static class DependencyInjection
 {
     public static void AddInfrastructureServices(this IHostApplicationBuilder builder)
     {
+        // Database registration
         var connectionStrings = builder.Configuration.GetConnectionString("AccidentMonitorDB");
 
         Guard.Against.Null(connectionStrings, message: "Connection string 'AccidentMonitorDB' not found.");
@@ -41,6 +42,7 @@ public static class DependencyInjection
 
         builder.Services.AddScoped<ApplicationDbContextInitializer>();
 
+        // Identity registration
         builder.Services.AddAuthentication()
             .AddBearerToken(IdentityConstants.BearerScheme);
 
@@ -58,18 +60,19 @@ public static class DependencyInjection
         builder.Services.AddAuthorizationBuilder()
             .AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator));
 
-        // Repositories
+        // Repositories registration
         builder.Services.AddTransient<IAccidentRepository, AccidentRepository>();
         builder.Services.AddTransient<IBlockedPolygonCoordRepository, BlockedPolygonCoordinateRepository>();
+        builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-        // MQTT Service
+        // MQTT Service registration
         builder.Services.Configure<MqttConnectionConfiguration>
             (builder.Configuration.GetSection("MqttConnectionConfig"));
         builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<MqttConnectionConfiguration>>().Value);
         builder.Services.AddSingleton<IMqttService, MqttClientService>();
         builder.Services.AddScoped<MqttClientContextInitializer>();
 
-        // ORService 
+        // ORService registration
         builder.Services.AddSingleton<IORService, ORService>();
         var orsConnectionString = builder.Configuration.GetSection("ORSUri");
         builder.Services.Configure<ORSConfiguration>(builder.Configuration.GetSection("ORS"));

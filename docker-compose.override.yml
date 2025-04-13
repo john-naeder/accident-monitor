@@ -4,7 +4,7 @@ services:
     container_name: accident-monitor
     build:
       args:
-        BUILD_CONFIGURATION: Debug
+        BUILD_CONFIGURATION: Release
       context: ./accident-monitor/
       dockerfile: Dockerfile
     ports:
@@ -32,6 +32,11 @@ services:
       ORS__ApiKey: ""
       ASPNETCORE_HTTP_PORTS: 80
       # ASPNETCORE_HTTPS_PORTS: 443
+    labels: 
+      - "traefik.enable=true"
+      - "traefik.http.services.accident-monitor.loadbalancer.server.port=80" 
+      - "traefik.http.routers.accident-monitor.entrypoints=web"
+      - "traefik.http.routers.accident-monitor.rule=Host(`accident-monitor.docker.localhost`)"
     networks:
       - net_sim
     restart: unless-stopped

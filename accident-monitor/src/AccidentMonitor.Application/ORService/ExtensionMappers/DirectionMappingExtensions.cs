@@ -24,7 +24,7 @@ public static class DirectionMappingExtensions
         {
             var segments = source.Routes
                                  .Where(r => r?.Segments != null)
-                                 .SelectMany(r => r.Segments)
+                                 .SelectMany(r => r.Segments!)
                                  .ToList();
 
             directionCutResponse.Route = segments.Select(segment => new SegmentResponseDto

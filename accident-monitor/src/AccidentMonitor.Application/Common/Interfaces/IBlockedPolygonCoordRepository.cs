@@ -3,6 +3,6 @@
 namespace AccidentMonitor.Application.Common.Interfaces;
 public interface IBlockedPolygonCoordRepository : IRepository<PolygonCoordinate>
 {
-    Task<List<PolygonCoordinate>> DeleteResolvedPolygonCoordinatesAsync(Guid accidentId);
-    Task<List<PolygonCoordinate>> GetAllUnResolvedAsync();
+    Task<IEnumerable<PolygonCoordinate>> DeleteResolvedPolygonCoordinatesAsync(Guid accidentId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<PolygonCoordinate>> GetAllUnResolvedAsync(CancellationToken cancellationToken = default);
 }
