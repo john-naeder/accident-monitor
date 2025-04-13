@@ -1,0 +1,21 @@
+acl internal {
+
+};
+
+options {
+  directory "/var/cache/bind";
+  listen-on { any; };
+  listen-on-v6 { any; };
+  recursion yes;
+  allow-recursion { any; };
+  # allow-query { internal; };
+  allow-query { any; };
+  forward first;
+  forwarders {
+    1.1.1.1;
+    1.0.0.1;
+    8.8.8.8;
+  };
+  dnssec-validation auto;
+  auth-nxdomain no;
+};

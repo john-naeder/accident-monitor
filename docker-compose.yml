@@ -106,8 +106,8 @@
       - ACCEPT_EULA=Y
       - SA_PASSWORD=${Sa_Password:-#TaoSieuDepTrai123}
       - MSSQL_PID=Developer
-    # ports:
-    #   - 1433:1433
+    ports:
+      - 1433:1433
     volumes:
       - accident_monitor_data:/var/opt/mssql
     restart: unless-stopped
@@ -121,6 +121,7 @@
       - net_sim
     labels:
       - "traefik.enable=false"
+
   # ------------------ Accident monitor DB Startup Config ------------------ #
   accident-monitor-db.configurator:
     container_name: accident-monitor-db.configurator
@@ -172,6 +173,25 @@
       - ./traefik-docker/traefik.yml:/etc/traefik/traefik.yml
     networks: 
       - net_sim
+
+# -------------------------- DNS server ------------------------ #
+  dns-services:
+    image: ubuntu/bind9:latest
+    container_name: bind9
+    hostname: dns-services
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    volumes:
+      - ./bind9-docker/config/named.conf.options:/etc/bind/named.conf.options
+      - ./bind9-docker/config/named.conf.local:/etc/bind/named.conf.local
+      - ./bind9-docker/zones:/etc/bind/zones
+      - ./bind9-docker/cache:/var/cache/bind
+    restart: unless-stopped
+    networks:
+      - net_sim
+    labels:
+      - "traefik.enable=false"
 
 networks:
   net_sim:

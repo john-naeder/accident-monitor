@@ -1,0 +1,5 @@
+zone "docker.localhost" {
+    type master;
+    file "/etc/bind/zones/db.docker.localhost";
+    allow-update { none; };
+};
