@@ -7,9 +7,9 @@ services:
         BUILD_CONFIGURATION: Release
       context: ./accident-monitor/
       dockerfile: Dockerfile
-    ports:
-      - "5000:80"
-      - "5001:443"
+    # ports:
+    #   - "5000:80"
+    #   - "5001:443"
     hostname: accident-monitor
     depends_on:
       accident-monitor-db:
@@ -39,6 +39,8 @@ services:
       - "traefik.http.routers.accident-monitor.rule=Host(`accident-monitor.docker.localhost`)"
     networks:
       - net_sim
+    expose:
+      - "80"
     restart: unless-stopped
     # healthcheck:
     #   test: ["CMD-SHELL", "curl -f http://localhost:80/health || exit 1"]
