@@ -1,8 +1,8 @@
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var webServerPath = "./src/Web";
-var webClientPath = "./src/Web/ClientApp";
+var webServerPath = "./src/AccidentMonitor.WebApi";
+var webClientPath = "./src/AccidentMonitor.WebApp";
 var webUrl = "https://localhost:5001/";
 
 IProcess webProcess = null;
@@ -10,7 +10,7 @@ IProcess webProcess = null;
 Task("Build")
     .Does(() => {
         Information("Building project...");
-        DotNetBuild("./AccidentMonitoring.sln", new DotNetBuildSettings {
+        DotNetBuild("./AccidentMonitor.sln", new DotNetBuildSettings {
             Configuration = configuration
         });
     });
@@ -66,7 +66,7 @@ Task("Test")
         };
 
 
-        DotNetTest("./AccidentMonitoring.sln", testSettings);
+        DotNetTest("./AccidentMonitor.sln", testSettings);
     });
 
 Teardown(context =>

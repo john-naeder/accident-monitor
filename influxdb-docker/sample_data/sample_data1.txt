@@ -1,0 +1,14 @@
+﻿device_status,deviceId=device001 isOnline=true,batteryLevel=95.5,signalStrength=-60.2,latitude=10.762622,longitude=106.660172,address="123 Đường A, Quận 1, TP.HCM" 1744817683000000000
+device_status,deviceId=device001 isOnline=true,batteryLevel=94.8,signalStrength=-61.5,latitude=10.762788,longitude=106.660321,address="123 Đường A, Quận 1, TP.HCM" 1744817743000000000
+device_status,deviceId=device001 isOnline=false,batteryLevel=94.1,signalStrength=-62.1,latitude=10.762912,longitude=106.660456,address="123 Đường A, Quận 1, TP.HCM" 1744817803000000000
+device_status,deviceId=device001 isOnline=false,batteryLevel=93.5,signalStrength=-63.0,latitude=10.763055,longitude=106.660589,address="123 Đường A, Quận 1, TP.HCM" 1744817863000000000
+
+device_status,deviceId=device002 isOnline=true,batteryLevel=78.9,signalStrength=-55.8,latitude=10.770011,longitude=106.665522,address="456 Đường B, Quận 3, TP.HCM" 1744817683000000000
+device_status,deviceId=device002 isOnline=true,batteryLevel=77.6,signalStrength=-56.3,latitude=10.770155,longitude=106.665678,address="456 Đường B, Quận 3, TP.HCM" 1744817743000000000
+device_status,deviceId=device002 isOnline=true,batteryLevel=76.5,signalStrength=-57.1,latitude=10.770299,longitude=106.665834,address="456 Đường B, Quận 3, TP.HCM" 1744817803000000000
+device_status,deviceId=device002 isOnline=false,batteryLevel=75.2,signalStrength=-58.0,latitude=10.770443,longitude=106.665990,address="456 Đường B, Quận 3, TP.HCM" 1744817863000000000
+
+device_status,deviceId=device003 isOnline=true,batteryLevel=62.3,signalStrength=-70.5,latitude=10.785033,longitude=106.670944,address="789 Đường C, Quận Phú Nhuận, TP.HCM" 1744817683000000000
+device_status,deviceId=device003 isOnline=false,batteryLevel=61.1,signalStrength=-71.2,latitude=10.785188,longitude=106.671101,address="789 Đường C, Quận Phú Nhuận, TP.HCM" 1744817743000000000
+device_status,deviceId=device003 isOnline=true,batteryLevel=60.0,signalStrength=-72.0,latitude=10.785344,longitude=106.671257,address="789 Đường C, Quận Phú Nhuận, TP.HCM" 1744817803000000000
+device_status,deviceId=device003 isOnline=true,batteryLevel=59.4,signalStrength=-72.8,latitude=10.785499,longitude=106.671414,address="789 Đường C, Quận Phú Nhuận, TP.HCM" 1744817863000000000
