@@ -4,7 +4,6 @@ using AccidentMonitor.Application.Common.Interfaces;
 using AccidentMonitor.Application.Converter;
 using AccidentMonitor.Application.ORService.Queries.GetDirectionAdvanced.Dtos;
 using AccidentMonitor.Application.ORService.Queries.GetDirections.Dtos;
-using Microsoft.AspNetCore.Http;
 
 namespace AccidentMonitor.Infrastructure.ORS;
 public class ORService : IORService
@@ -12,7 +11,6 @@ public class ORService : IORService
     private readonly HttpClient _httpClient;
     private readonly string _baseUri;
     private readonly JsonSerializerOptions? _jsonSerializerOptions;
-
     public ORService(ORSConfiguration options)
     {
         _httpClient = new HttpClient();

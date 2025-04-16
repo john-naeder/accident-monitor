@@ -85,6 +85,7 @@ namespace AccidentMonitor.Infrastructure.MQTT
                 .WithTimeout(TimeSpan.FromSeconds(5))
                 .WithKeepAlivePeriod(TimeSpan.FromSeconds(60))
                 .WithCredentials(_config.Username, _config.Password);
+            _logger.LogError("Connecting to MQTT broker at {uri}", uri);
 
             builder = _config.UseWebSocket
                 ? builder.WithWebSocketServer(o => o.WithUri($"ws://{uri}"))
@@ -106,7 +107,8 @@ namespace AccidentMonitor.Infrastructure.MQTT
                         ? builder.WithTlsOptions(o =>
                         {
                             o.WithCertificateValidationHandler(_ => true);
-                            o.WithSslProtocols(SslProtocols.Tls12);
+                            o.WithSslProtocols(SslProtocols.Tls13);
+                            o.WithTargetHost(_config.Broker);
                             //o.WithClientCertificates(new[] { cert });
                         })
                         : builder.WithTlsOptions(new MqttClientTlsOptionsBuilder()
@@ -129,7 +131,8 @@ namespace AccidentMonitor.Infrastructure.MQTT
                     _logger.LogInformation("Attempting to connect to MQTT broker at {Server}:{Port}",
                         _config.Broker, _config.Port);
                     response = await _mqttClient.ConnectAsync(clientOptions, _cancellationTokenSource.Token);
-                    _logger.LogInformation("Connected to MQTT broker successfully");
+                    if (response.IsSessionPresent) _logger.LogInformation("Connected to MQTT broker successfully");
+                    else _logger.LogError($"Connection establish failed due to: {response.ReasonString}");
                 }
             }
             catch (MqttConnectingFailedException ex)
@@ -272,7 +275,6 @@ namespace AccidentMonitor.Infrastructure.MQTT
 
         public async Task<ServiceResult> PublishAsync<T>(string topic, T dto)
         {
-
             string jsonPayload = JsonSerializer.Serialize(dto);
 
             var message = new MqttApplicationMessageBuilder()

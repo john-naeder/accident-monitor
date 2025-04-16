@@ -1,11 +1,11 @@
 ﻿using AccidentMonitor.Application.Common.Interfaces;
 using AccidentMonitor.Domain.Constants;
+using AccidentMonitor.Infrastructure.Data;
+using AccidentMonitor.Infrastructure.Data.Interceptors;
 using AccidentMonitor.Infrastructure.Identity;
 using AccidentMonitor.Infrastructure.MQTT;
 using AccidentMonitor.Infrastructure.ORS;
-using AccidentMonitor.Infrastructure.Persistence.Data;
-using AccidentMonitor.Infrastructure.Persistence.Data.Interceptors;
-using AccidentMonitor.Infrastructure.Persistence.Repositories;
+using AccidentMonitor.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -73,10 +73,9 @@ public static class DependencyInjection
         builder.Services.AddScoped<MqttClientContextInitializer>();
 
         // ORService registration
-        builder.Services.AddSingleton<IORService, ORService>();
-        var orsConnectionString = builder.Configuration.GetSection("ORSUri");
         builder.Services.Configure<ORSConfiguration>(builder.Configuration.GetSection("ORS"));
         builder.Services.AddSingleton(resolver =>
             resolver.GetRequiredService<IOptions<ORSConfiguration>>().Value);
+        builder.Services.AddSingleton<IORService, ORService>();
     }
 }

@@ -17,6 +17,7 @@ COPY ["./src/AccidentMonitor.Application/AccidentMonitor.Application.csproj", ".
 COPY ["./src/AccidentMonitor.Infrastructure/AccidentMonitor.Infrastructure.csproj", "./src/AccidentMonitor.Infrastructure/"]
 COPY ["./src/AccidentMonitor.ServiceDefaults/AccidentMonitor.ServiceDefaults.csproj", "./src/AccidentMonitor.ServiceDefaults/"]
 COPY ["./src/AccidentMonitor.WebApi/AccidentMonitor.WebApi.csproj", "./src/AccidentMonitor.WebApi/"]
+COPY ["./src/AccidentMonitor.WebApp/AccidentMonitor.WebApp.csproj", "./src/AccidentMonitor.WebApp/"]
 COPY ["./src/AccidentMonitor.AppHost/AccidentMonitor.AppHost.csproj", "./src/AccidentMonitor.AppHost/"]
 
 COPY ["./tests/AccidentMonitor.Application.FunctionalTests/AccidentMonitor.Application.FunctionalTests.csproj", "./tests/AccidentMonitor.Application.FunctionalTests/"]

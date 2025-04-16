@@ -37,7 +37,6 @@ public class MqttClientContextInitializer
             {
                 Status = "Ok"
             });
-            //await _mqttServices.ConnectAsync();
             _logger.LogInformation("Broker connection initialized.");
         }
         catch (Exception ex)

@@ -1,5 +1,7 @@
 acl internal {
-
+    192.168.0.0/16; 
+    172.16.0.0/12;
+    10.0.0.0/8;
 };
 
 options {
@@ -8,8 +10,8 @@ options {
   listen-on-v6 { any; };
   recursion yes;
   allow-recursion { any; };
-  # allow-query { internal; };
-  allow-query { any; };
+  allow-query { internal; };
+  # allow-query { any; };
   forward first;
   forwarders {
     1.1.1.1;

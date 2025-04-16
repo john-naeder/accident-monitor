@@ -1,6 +1,6 @@
 ﻿using AccidentMonitor.Domain.Constants;
+using AccidentMonitor.Infrastructure.Data;
 using AccidentMonitor.Infrastructure.Identity;
-using AccidentMonitor.Infrastructure.Persistence.Data;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -3,7 +3,7 @@ using AccidentMonitor.Application.Common.Interfaces;
 using AccidentMonitor.Application.Common.Models;
 using AccidentMonitor.Domain.Entities.Accident;
 using AccidentMonitor.Domain.Enums;
-using AccidentMonitor.Infrastructure.Persistence.Repositories;
+using AccidentMonitor.Infrastructure.Repositories;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 

@@ -1,8 +1,8 @@
 ﻿namespace AccidentMonitor.Application.Common.Results;
 
-public class ServiceResult(int isSucces, string reason)
+public class ServiceResult(int code, string message)
 {
-    public int ResultCode { get; set; } = isSucces;
-    public string Reason { get; set; } = reason;
+    public int Code { get; } = code;
+    public string Message { get; } = message ?? string.Empty;
+    public bool IsSuccess => Code == 0;
 }
-

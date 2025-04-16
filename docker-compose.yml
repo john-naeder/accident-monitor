@@ -17,47 +17,35 @@
   #   networks:
   #     - net_sim
 
-  # ---------------- ORS application configuration ---------------- #
-  ors-app:
-    container_name: ors-app
+  # -------------------------- Visualization Dashboard ------------------------ #
+  grafana:
+    image: grafana/grafana-oss:11.6.0
+    container_name: grafana
     # ports:
-    #   - "8081:80" 
-    image: openrouteservice/openrouteservice:v9.1.1
-    # user: "1000:1000" 
-    volumes: 
-      - ./ors-docker:/home/ors 
+    #   - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana-docker/provisioning:/etc/grafana/provisioning
     environment:
-      REBUILD_GRAPHS: True  
-      CONTAINER_LOG_LEVEL: INFO  
-      ORS_CONFIG_LOCATION: /home/ors/config/vietnam-latest.osm.yml  
-      XMS: 1g  # start RAM assigned to java
-      XMX: 7g  # max RAM assigned to java. Rule of Thumb: <PBF-size> * <profiles> * 2
-      # Example: 1.5 GB pbf size, two profiles (car and foot-walking)
-      # -> 1.5 * 2 * 2 = 6. Set xmx to be AT LEAST `-Xmx6g`
-      ADDITIONAL_JAVA_OPTS: "" 
-    networks:
-      - net_sim
+      - GF_SECURITY_ADMIN_USER=johnnaeder
+      - GF_SECURITY_ADMIN_PASSWORD=Taodeptrai123@
+      - GF_SERVER_ROOT_URL=https://grafana.duydz.tao
+    depends_on:
+      - influxdb
     expose:
       - "80" 
+    networks:
+      net_sim:
+        ipv4_address: 172.20.0.7
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.ors-app.entrypoints=web"
-      - "traefik.http.services.ors-app.loadbalancer.server.port=80"      
-      - "traefik.http.routers.ors-app.rule=Host(`ors-app.docker.localhost`)"
-    healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost:8080/ors/v2/health || exit 1
-      start_period: 10m
-      interval: 30s
-      timeout: 2s
-      retries: 3
-      disable: true
-    # deploy:
-    #   restart_policy:
-    #     condition: on-failure
-    #     delay: 5s
-    #     max_attempts: 5
-    #     window: 120s
-    restart: unless-stopped
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - "traefik.http.routers.grafana-http.entrypoints=web"
+      - "traefik.http.routers.grafana-http.rule=Host(`grafana.duydz.tao`)"
+      - "traefik.http.routers.grafana-https.entrypoints=websecure"
+      - "traefik.http.routers.grafana-https.rule=Host(`grafana.duydz.tao`)"
+      - "traefik.http.routers.grafana-https.tls=true"
 
   # -------------------------- MQTT broker ------------------------ #
   mosquitto:
@@ -65,8 +53,8 @@
     hostname: mosquitto
     container_name: mosquitto
     # ports:
-    #   - "1883:1883"
-    #   - "9001:9001"
+    #   - "1884:1883" # Port for Non-TLS-SNI connections
+    #   - "9002:9001" # Port for Non-Tls-SNI connections
     stdin_open: true 
     tty: true
     volumes:
@@ -81,16 +69,25 @@
     #     max_attempts: 5
     #     window: 120s
     networks:
-      - net_sim
+      net_sim:
+        ipv4_address: 172.20.0.10
     expose:
       - "1883"
       - "9001"
     labels:
       - "traefik.enable=true"
-      - "traefik.tcp.routers.mosquitto.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.mosquitto.entrypoints=mqtt"
-      - "traefik.http.routers.mosquitto.rule=Host(`mosquitto.docker.localhost`)"
-      - "traefik.tcp.services.mosquitto.loadbalancer.server.port=1883"
+      - "traefik.tcp.services.mqtt.loadbalancer.server.port=1883"
+      - "traefik.tcp.services.mqtt_websocket.loadbalancer.server.port=9001"
+      - "traefik.tcp.routers.tcpr_mqtt.service=mqtt"
+      - "traefik.tcp.routers.tcpr_mqtt.entrypoints=mqtt"
+      - "traefik.tcp.routers.tcpr_mqtt.rule=HostSNI(`mqtt.duydz.tao`)"
+      - "traefik.tcp.routers.tcpr_mqtt_websocket.entrypoints=websocket"
+      - "traefik.tcp.routers.tcpr_mqtt_websocket.service=mqtt_websocket"
+      - "traefik.tcp.routers.tcpr_mqtt_websocket.rule=HostSNI(`mqtt.duydz.tao`)"
+      - "traefik.tcp.routers.tcpr_mqtt_websocket.tls=true"
+      - "traefik.tcp.routers.tcpr_mqtt.tls=true"
+      # - "traefik.tcp.routers.mqtt.tls.passthrough=true"
+
     healthcheck:
       test: ["CMD", "mosquitto_sub", "-h", "127.0.0.1", "-p", "1880", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3"]
       interval: 30s
@@ -101,7 +98,6 @@
   accident-monitor-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: accident-monitor-db
-
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=${Sa_Password:-#TaoSieuDepTrai123}
@@ -118,7 +114,8 @@
           retries: 10
           start_period: 10s
     networks:
-      - net_sim
+      net_sim: 
+        ipv4_address: 172.20.0.20
     labels:
       - "traefik.enable=false"
 
@@ -139,7 +136,8 @@
       /opt/mssql-tools18/bin/sqlcmd -C -S accident-monitor-db -U sa -P "$${SA_PASSWORD}" -d master -i docker-entrypoint-initdb.d/init.sql;
       echo "All done!";'
     networks:
-      - net_sim
+      net_sim: 
+        ipv4_address: 172.20.0.21
     restart: on-failure
     labels:
       - "traefik.enable=false"
@@ -152,10 +150,34 @@
       - "6379:6379"
     volumes:
       - redis_data:/data
-
     restart: unless-stopped
     networks:
-      - net_sim
+      net_sim: 
+        ipv4_address: 172.20.0.22
+    labels:
+      - "traefik.enable=false"
+
+  # -------------------------- Time Series Database ------------------------ #
+  influxdb:
+    image: influxdb:2.7.11
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - ./influxdb-docker/config:/etc/influxdb2
+      - ./influxdb-docker/sample_data:/data
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=johnnaeder
+      - DOCKER_INFLUXDB_INIT_PASSWORD=Taodeptrai123@
+      - DOCKER_INFLUXDB_INIT_ORG=accident-monitor-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=iot_status
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=TaoDuySieuDZ123@
+    networks:
+      net_sim: 
+        ipv4_address: 172.20.0.23
+    restart: unless-stopped
     labels:
       - "traefik.enable=false"
 
@@ -166,16 +188,21 @@
     ports:
       - "80:80"
       - "443:443"
+      - "3000:3000"
       - "1883:1883"
       - "8080:8080"
+      - "9001:9001"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik-docker/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik-docker/certs:/etc/traefik/certs
     networks: 
-      - net_sim
+      net_sim:
+        ipv4_address: 172.20.0.2
+    restart: unless-stopped
 
 # -------------------------- DNS server ------------------------ #
-  dns-services:
+  dns-service:
     image: ubuntu/bind9:latest
     container_name: bind9
     hostname: dns-services
@@ -189,7 +216,8 @@
       - ./bind9-docker/cache:/var/cache/bind
     restart: unless-stopped
     networks:
-      - net_sim
+      net_sim:
+        ipv4_address: 172.20.0.3
     labels:
       - "traefik.enable=false"
 
@@ -198,6 +226,11 @@ networks:
     driver: bridge
     driver_opts:
       com.docker.network.bridge.name: br0
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24
+          gateway: 172.20.0.1 
 
 volumes:
   accident_monitor_data:
@@ -212,3 +245,5 @@ volumes:
 #       type: none
 #       device: /home/accident_monitor_data
 #       o: bind
+  influxdb_data:
+  grafana_data:

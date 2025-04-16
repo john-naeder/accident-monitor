@@ -1,5 +1,5 @@
 ﻿using System.Data.Common;
-using AccidentMonitor.Infrastructure.Persistence.Data;
+using AccidentMonitor.Infrastructure.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;

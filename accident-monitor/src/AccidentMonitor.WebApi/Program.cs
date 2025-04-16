@@ -1,14 +1,19 @@
 ﻿using AccidentMonitor.Application;
 using AccidentMonitor.Infrastructure;
+using AccidentMonitor.Infrastructure.Data;
 using AccidentMonitor.Infrastructure.MQTT;
-using AccidentMonitor.Infrastructure.Persistence.Data;
 using AccidentMonitor.ServiceDefaults;
 using AccidentMonitor.WebApi;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddEnvironmentVariables();
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
+
 builder.AddServiceDefaults();
 
 builder.AddKeyVaultIfConfigured();
@@ -33,7 +38,8 @@ else
     app.UseHsts();
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseSwaggerUi(settings =>

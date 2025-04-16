@@ -6,7 +6,6 @@
     <NuGetAudit>false</NuGetAudit>
 
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
